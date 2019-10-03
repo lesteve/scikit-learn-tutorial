@@ -40,18 +40,18 @@
 # %%
 import pandas as pd
 
-df = pd.read_csv("https://www.openml.org/data/get_csv/1595261/adult-census.csv")
+df = pd.read_csv(
+    "https://www.openml.org/data/get_csv/1595261/adult-census.csv"
+)
 
 # Or use the local copy:
 # df = pd.read_csv('../datasets/adult-census.csv')
-
 
 # %% [markdown]
 # Let's have a look at the first records of this data frame:
 
 # %%
 df.head()
-
 
 # %% [markdown]
 # The target variable in our study will be the "class" column while we will use
@@ -69,7 +69,6 @@ target_name = "class"
 target = df[target_name].to_numpy()
 target
 
-
 # %%
 data = df.drop(columns=[target_name, "fnlwgt"])
 data.head()
@@ -81,9 +80,7 @@ data.head()
 # %%
 print(
     f"The dataset contains {data.shape[0]} samples and {data.shape[1]} "
-    "features"
-)
-
+    "features")
 
 # %% [markdown]
 # ## Working with numerical data
@@ -98,14 +95,13 @@ print(
 # %%
 data.columns
 
-
 # %%
 data.dtypes
 
-
 # %%
-numerical_columns = [c for c in data.columns
-                     if data[c].dtype.kind in ["i", "f"]]
+numerical_columns = [
+    c for c in data.columns
+    if data[c].dtype.kind in ["i", "f"]]
 numerical_columns
 
 # %%
@@ -126,18 +122,14 @@ data_numeric.head()
 from sklearn.model_selection import train_test_split
 
 data_train, data_test, target_train, target_test = train_test_split(
-    data_numeric, target, random_state=42
-)
+    data_numeric, target, random_state=42)
 
 print(
     f"The training dataset contains {data_train.shape[0]} samples and "
-    f"{data_train.shape[1]} features"
-)
+    f"{data_train.shape[1]} features")
 print(
     f"The testing dataset contains {data_test.shape[0]} samples and "
-    f"{data_test.shape[1]} features"
-)
-
+    f"{data_test.shape[1]} features")
 
 # %% [markdown]
 # We will build a linear classification model called "Logistic Regression". The
@@ -160,7 +152,6 @@ print(
     f"{elapsed_time:.3f} seconds for {model.n_iter_} iterations"
 )
 
-
 # %% [markdown]
 # Let's ignore the convergence warning for now and instead let's try
 # to use our model to make some predictions on the first three records
@@ -170,10 +161,8 @@ print(
 target_predicted = model.predict(data_test)
 target_predicted[:5]
 
-
 # %%
 target_test[:5]
-
 
 # %%
 predictions = data_test.copy()
@@ -181,7 +170,6 @@ predictions['predicted-class'] = target_predicted
 predictions['expected-class'] = target_test
 predictions['correct'] = target_predicted == target_test
 predictions.head()
-
 
 # %% [markdown]
 # To quantitatively evaluate our model, we can use the method `score`. It will
@@ -191,9 +179,7 @@ predictions.head()
 # %%
 print(
     f"The test accuracy using a {model.__class__.__name__} is "
-    f"{model.score(data_test, target_test):.3f}"
-)
-
+    f"{model.score(data_test, target_test):.3f}")
 
 # %% [markdown]
 # This is mathematically equivalent as computing the average number of time
@@ -201,7 +187,6 @@ print(
 
 # %%
 (target_test == target_predicted).mean()
-
 
 # %% [markdown]
 # ## Exercise 1
@@ -228,7 +213,6 @@ start = time.time()
 model.fit(data_train, target_train)
 elapsed_time = time.time() - start
 
-
 # %%
 print(
     f"The accuracy using a {model.__class__.__name__} is "
@@ -252,7 +236,6 @@ print(
 # %%
 data_train.describe()
 
-
 # %%
 from sklearn.preprocessing import StandardScaler
 
@@ -261,18 +244,18 @@ data_train_scaled = scaler.fit_transform(data_train)
 data_train_scaled
 
 # %%
-data_train_scaled = pd.DataFrame(data_train_scaled, columns=data_train.columns)
+data_train_scaled = pd.DataFrame(
+    data_train_scaled, columns=data_train.columns)
 data_train_scaled.describe()
-
 
 # %%
 from sklearn.pipeline import make_pipeline
 
-model = make_pipeline(StandardScaler(), LogisticRegression(solver='lbfgs'))
+model = make_pipeline(StandardScaler(),
+                      LogisticRegression(solver='lbfgs'))
 start = time.time()
 model.fit(data_train, target_train)
 elapsed_time = time.time() - start
-
 
 # %%
 print(
@@ -308,13 +291,11 @@ print(
 #
 #
 
-
 # %%
 from sklearn.model_selection import cross_val_score
 
 scores = cross_val_score(model, data_numeric, target, cv=5)
 print(f"The different scores obtained are: \n{scores}")
-
 
 # %%
 print(f"The mean cross-validation accuracy is: "
@@ -345,6 +326,7 @@ from matplotlib.patches import Patch
 
 cmap_cv = plt.cm.coolwarm
 
+
 def plot_cv_indices(cv, X, y, ax, lw=20):
     """Create a sample plot for indices of a cross-validation object."""
     splits = list(cv.split(X=X, y=y))
@@ -353,20 +335,23 @@ def plot_cv_indices(cv, X, y, ax, lw=20):
     # Generate the training/testing visualizations for each CV split
     for ii, (train, test) in enumerate(splits):
         # Fill in indices with the training/test groups
-        indices = np.zeros(shape=X.shape[0], dtype=np.int32)
+        indices = np.zeros(shape=X.shape[0],
+                           dtype=np.int32)
         indices[train] = 1
 
         # Visualize the results
-        ax.scatter(range(len(indices)), [ii + .5] * len(indices),
-                   c=indices, marker='_', lw=lw, cmap=cmap_cv,
-                   vmin=-.2, vmax=1.2)
+        ax.scatter(range(len(indices)), [ii + .5] *
+                   len(indices), c=indices, marker='_',
+                   lw=lw, cmap=cmap_cv, vmin=-.2, vmax=1.2)
 
     # Formatting
     yticklabels = list(range(n_splits))
-    ax.set(yticks=np.arange(n_splits+2) + .5, yticklabels=yticklabels,
-           xlabel='Sample index', ylabel="CV iteration",
-           ylim=[n_splits + .2, -.2], xlim=[0, 100])
-    ax.set_title('{}'.format(type(cv).__name__), fontsize=15)
+    ax.set(yticks=np.arange(n_splits + 2) + .5,
+           yticklabels=yticklabels, xlabel='Sample index',
+           ylabel="CV iteration", ylim=[
+               n_splits + .2, -.2], xlim=[0, 100])
+    ax.set_title('{}'.format(type(cv).__name__),
+                 fontsize=15)
     return ax
 
 
@@ -378,6 +363,6 @@ y = np.random.randn(n_points)
 
 fig, ax = plt.subplots(figsize=(10, 6))
 cv = KFold(5)
-plot_cv_indices(cv, X, y, ax);
+plot_cv_indices(cv, X, y, ax)
 
 # TODO: add summary here
