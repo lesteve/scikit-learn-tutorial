@@ -31,3 +31,5 @@ sanity_check_$(NOTEBOOKS_DIR):
 sanity_check_$(RENDERED_NOTEBOOKS_DIR):
 	python build_scripts/sanity-check.py $(NOTEBOOKS_DIR) $(RENDERED_NOTEBOOKS_DIR)
 
+yapf:
+	yapf --recursive --in-place --parallel $(PYTHON_SCRIPTS_DIR)
