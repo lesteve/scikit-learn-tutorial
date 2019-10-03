@@ -80,6 +80,7 @@ print(
 # The most intuitive strategy is to encode each category with a number.
 # The `OrdinalEncoder` will transform the data in such manner.
 
+
 # %%
 from sklearn.preprocessing import OrdinalEncoder
 
@@ -192,6 +193,7 @@ print(
 #
 # Use the dedicated notebook to do this exercise.
 
+
 # %% [markdown]
 # ## Using numerical and categorical variables together
 #
@@ -219,6 +221,7 @@ print(
 #
 #
 #
+
 
 # %%
 binary_encoding_columns = ['sex']
@@ -343,6 +346,7 @@ print(model.score(data_test, target_test))
 #
 #
 #
+
 
 # %% [markdown]
 # ## Exercise 2:

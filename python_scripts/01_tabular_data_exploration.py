@@ -129,6 +129,7 @@ adult_census.hist(figsize=(20, 10))
 # %% [markdown]
 # For categorical variables, we can look at the distribution of values:
 
+
 # %%
 adult_census['sex'].value_counts()
 
@@ -308,3 +309,4 @@ plot_tree_decision_function(tree, X, y, ax=ax)
 # * inspected the data with `pandas`, `seaborn` and `pandas_profiling`. Data inspection
 #   can allow you to decide whether using machine learning is appropriate for
 #   your data and to notice potential peculiarities in your data.
+
