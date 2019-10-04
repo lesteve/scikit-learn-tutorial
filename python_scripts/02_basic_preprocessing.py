@@ -367,6 +367,6 @@ y = np.random.randn(n_points)
 
 fig, ax = plt.subplots(figsize=(10, 6))
 cv = KFold(5)
-plot_cv_indices(cv, X, y, ax)
+_ = plot_cv_indices(cv, X, y, ax)
 
 # TODO: add summary here

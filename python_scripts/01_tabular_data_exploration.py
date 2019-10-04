@@ -11,11 +11,11 @@
 
 # %% [markdown]
 # In this notebook, we will look at necessary steps that happen
-# before any machine learning takes place.
-# * load the data
+# before any machine learning takes place:
+# * load the data;
 # * look at the variables in the dataset, in particular make the
 #   difference between numerical and categorical variables, which
-#   need different preprocessing in most machine learning workflows
+#   need different preprocessing in most machine learning workflows;
 # * visualize the distribution of the variables to gain some
 #   insights into the dataset.
 
@@ -116,7 +116,7 @@ adult_census = adult_census[all_columns]
 # note that this only works for numerical variables:
 
 # %%
-adult_census.hist(figsize=(20, 10))
+_ = adult_census.hist(figsize=(20, 10))
 
 # %% [markdown]
 # We can already make a few comments about some of the variables:
@@ -174,14 +174,14 @@ pd.crosstab(index=adult_census['education'],
 # %%
 n_samples_to_plot = 5000
 columns = ['age', 'education-num', 'hours-per-week']
-sns.pairplot(data=adult_census[:n_samples_to_plot], vars=columns,
-             hue=target_column, plot_kws={'alpha': 0.2}, height=4,
-             diag_kind='hist')
+_ = sns.pairplot(data=adult_census[:n_samples_to_plot], vars=columns,
+                 hue=target_column, plot_kws={'alpha': 0.2}, height=4,
+                 diag_kind='hist')
 
 # %%
-sns.pairplot(data=adult_census[:n_samples_to_plot], x_vars='age',
-             y_vars='hours-per-week', hue=target_column,
-             markers=['o', 'v'], plot_kws={'alpha': 0.2}, height=12)
+_ = sns.pairplot(data=adult_census[:n_samples_to_plot], x_vars='age',
+                 y_vars='hours-per-week', hue=target_column,
+                 markers=['o', 'v'], plot_kws={'alpha': 0.2}, height=12)
 
 # %% [markdown]
 #
