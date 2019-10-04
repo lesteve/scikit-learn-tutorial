@@ -16,8 +16,8 @@
 # accuracy) to some baseline classifiers that  would ignore the input
 # data and instead make constant predictions.
 #
-# The online [documentation for DummyClassifier](https://scikit-
-# learn.org/stable/modules/model_evaluation.html#dummy-estimators)
+# The online
+# [documentation for DummyClassifier](https://scikit-learn.org/stable/modules/model_evaluation.html#dummy-estimators)
 # gives instructions on how to use it.
 
 # %%

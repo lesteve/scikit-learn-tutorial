@@ -10,7 +10,7 @@
 # ---
 
 # %% [markdown]
-# #  Exercise 01
+# # Exercise 01
 # The goal is to find the best set of hyper-parameters which
 # maximize the performance on a training set.
 

@@ -216,13 +216,6 @@ print(f"The accuracy is: {scores.mean():.3f} +/- {scores.std():.3f}")
 #   one additional column for each possible categorical value.
 # * **numerical scaling** numerical features which will be
 #   standardized.
-#
-#
-#
-#
-#
-#
-#
 
 # %%
 binary_encoding_columns = ['sex']
@@ -317,13 +310,13 @@ from sklearn.experimental import enable_hist_gradient_boosting
 from sklearn.ensemble import HistGradientBoostingClassifier
 
 # For each categorical column, extract the list of all possible
-# categories in some arbritrary order.
+# categories in some arbitary order.
 categories = [
     data[column].unique() for column in data[categorical_columns]]
 
 preprocessor = ColumnTransformer([
     ('categorical', OrdinalEncoder(categories=categories),
-     categorical_columns),], remainder="passthrough")
+     categorical_columns)], remainder="passthrough")
 
 model = make_pipeline(preprocessor, HistGradientBoostingClassifier())
 model.fit(data_train, target_train)
@@ -338,21 +331,14 @@ print(model.score(data_test, target_test))
 #
 # This explains why Gradient Boosted Machines are very popular
 # among datascience practitioners who work with tabular data.
-#
-#
-#
-#
-#
-#
-#
 
 # %% [markdown]
 # ## Exercise 2:
 #
 # - Check that scaling the numerical features does not impact the
-#   speed or accuracy of HistGradientBoostingClassifier
+#   speed or accuracy of `HistGradientBoostingClassifier`
 # - Check that one-hot encoding the categorical variable does not
-#   improve the accuracy of HistGradientBoostingClassifier but slows
+#   improve the accuracy of `HistGradientBoostingClassifier` but slows
 #   down the training.
 #
 # Use the dedicated notebook to do this exercise.

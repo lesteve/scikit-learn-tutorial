@@ -12,7 +12,7 @@
 # %% [markdown]
 # # Solution for Exercise 02
 #
-# The goal of this exercise is to evalutate the impact of using an
+# The goal of this exercise is to evaluate the impact of using an
 # arbitrary integer encoding for categorical variables along with a
 # linear classification model such as Logistic Regression.
 #
@@ -27,9 +27,10 @@
 # category at prediction time, we need to pre-compute the list of all
 # possible categories ahead of time:
 #
-# ```python categories = [data[column].unique()               for
-# column in data[categorical_columns]]
-# OrdinalEncoder(categories=categories) ```
+# ```python
+# categories = [data[column].unique() for column in data[categorical_columns]]
+# OrdinalEncoder(categories=categories)
+# ```
 
 # %%
 import pandas as pd

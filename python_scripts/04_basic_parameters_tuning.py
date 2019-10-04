@@ -255,28 +255,29 @@ print(f"Time elapsed to train LogisticRegressionCV: "
 # %% [markdown]
 # ## Exercises:
 #
-# - Build a machine learning pipeline:     * preprocess the
-#   categorical columns using an `OrdinalEncoder` and let       the
-#   numerical columns as they are.     * use an
-#   `HistGradientBoostingClassifier` as a predictive model.
-# - Make an hyper-parameters search using `RandomizedSearchCV`
-#   and tuning the parameters:     * `learning_rate` with values
-#   ranging from 0.001 to 0.5. You can use       an exponential
-#   distribution to sample the possible values.     *
-#   `l2_regularization` with values ranging from 0 to 0.5. You can
-#   use       a uniform distribution.     * `max_lead_nodes` with
-#   values ranging from 5 to 30. The values should       be integer
-#   following a uniform distribution.     * `min_samples_leaf` with
-#   values ranging from 5 to 30. The values       should be integer
-#   following a uniform distribution.
+# Build a machine learning pipeline:
+# * preprocess the categorical columns using an `OrdinalEncoder` and let
+#   the numerical columns as they are.
+# * use an `HistGradientBoostingClassifier` as a predictive model.
+# Make an hyper-parameters search using `RandomizedSearchCV`
+# and tuning the parameters:
+# * `learning_rate` with values ranging from 0.001 to 0.5. You can use an
+#   exponential distribution to sample the possible values.
+# * `l2_regularization` with values ranging from 0 to 0.5. You can use a
+#   uniform distribution.
+# * `max_leaf_nodes` with values ranging from 5 to 30. The values should
+#   be integer following a uniform distribution.
+# * `min_samples_leaf` with values ranging from 5 to 30. The values
+#   should be integer following a uniform distribution.
 #
 # In case you have issues of with unknown categories, try to
 # precompute the list of possible categories ahead of time and pass
 # it explicitly to the constructor of the encoder:
 #
-# ```python categories = [data[column].unique()               for
-# column in data[categorical_columns]]
-# OrdinalEncoder(categories=categories) ```
+# ```python
+# categories = [data[column].unique() for column in data[categorical_columns]]
+# OrdinalEncoder(categories=categories)
+# ```
 
 # %% [markdown]
 # ## Combining evaluation and hyper-parameters search

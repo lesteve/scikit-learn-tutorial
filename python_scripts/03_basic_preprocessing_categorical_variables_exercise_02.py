@@ -13,7 +13,7 @@
 # # Exercise 03
 #
 # The goal of this exercise is to evaluate the impact of feature
-# preprocessing on a pipeline that uses a  decision-tree-based
+# preprocessing on a pipeline that uses a decision-tree-based
 # classifier instead of logistic regression.
 #
 # - The first question is to empirically evaluate whether scaling

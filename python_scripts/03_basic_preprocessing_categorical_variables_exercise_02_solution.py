@@ -23,7 +23,6 @@
 #   better (both from a computational and a statistical perspective)
 #   to use integer coded or one-hot encoded categories.
 #
-#
 # Hint: `HistGradientBoostingClassifier` does not yet support
 # sparse input data. You might want to use
 # `OneHotEncoder(handle_unknown="ignore", sparse=False)` to force the

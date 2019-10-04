@@ -7,6 +7,10 @@
 #       format_name: percent
 #       format_version: '1.2'
 #       jupytext_version: 1.2.3
+#   kernelspec:
+#     display_name: Python 3
+#     language: python
+#     name: python3
 # ---
 
 # %% [markdown]
@@ -134,6 +138,7 @@ _ = adult_census.hist(figsize=(20, 10))
 # %% [markdown]
 # For categorical variables, we can look at the distribution of
 # values:
+
 
 # %%
 adult_census['sex'].value_counts()
@@ -320,3 +325,4 @@ plot_tree_decision_function(tree, X, y, ax=ax)
 #   `pandas_profiling`. Data inspection can allow you to decide
 #   whether using machine learning is appropriate for your data and
 #   to notice potential peculiarities in your data.
+

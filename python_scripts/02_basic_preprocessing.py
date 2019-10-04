@@ -170,7 +170,7 @@ predictions.head()
 # %% [markdown]
 # To quantitatively evaluate our model, we can use the method
 # `score`. It will compute the classification accuracy when dealing
-# with a classificiation problem.
+# with a classification problem.
 
 # %%
 print(f"The test accuracy using a {model.__class__.__name__} is "
@@ -186,15 +186,14 @@ print(f"The test accuracy using a {model.__class__.__name__} is "
 # %% [markdown]
 # ## Exercise 1
 #
-# - What would be the score of a model that always predicts `'
-#   >50K'`?
-# - What would be the score of a model that always predicts `' <=
-#   50K'`?
+# - What would be the score of a model that always predicts
+#   `'>50K'`?
+# - What would be the score of a model that always predicts
+#   `' <= 50K'`?
 # - Is 81% or 82% accuracy a good score for this problem?
 #
 # Hint: You can compute the cross-validated of a
-# [DummyClassifier](https://scikit-
-# learn.org/stable/modules/model_evaluation.html#dummy-estimators)
+# [DummyClassifier](https://scikit-learn.org/stable/modules/model_evaluation.html#dummy-estimators)
 # the performance of such baselines.
 #
 # Use the dedicated notebook to do this exercise.
@@ -202,7 +201,7 @@ print(f"The test accuracy using a {model.__class__.__name__} is "
 # %% [markdown]
 # Let's now consider the `ConvergenceWarning` message that was
 # raised previously when calling the `fit` method to train our model.
-# This warning informs us that our model stopped learning becaused it
+# This warning informs us that our model stopped learning because it
 # reached the maximum number of iterations allowed by the user. This
 # could potentially be detrimental for the model accuracy. We can
 # follow the (bad) advice given in the warning message and increase
@@ -280,20 +279,13 @@ print(
 # Instead, we can use what cross-validation. Cross-validation
 # consists in repeating this random splitting into training and
 # testing sets and aggregate the model performance. By repeating the
-# experiment, one can get an estimate of the variabilty of the model
+# experiment, one can get an estimate of the variability of the model
 # performance.
 #
 # The function `cross_val_score` allows for such experimental
 # protocol by giving the model, the data and the target. Since there
-# exists several cross- validation strategies, `cross_val_score`
+# exists several cross-validation strategies, `cross_val_score`
 # takes a parameter `cv` which defines the splitting strategy.
-#
-#
-#
-#
-#
-#
-#
 
 # %%
 from sklearn.model_selection import cross_val_score
