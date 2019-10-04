@@ -24,8 +24,7 @@
 import pandas as pd
 
 df = pd.read_csv(
-    "https://www.openml.org/data/get_csv/1595261/adult-census.csv"
-)
+    "https://www.openml.org/data/get_csv/1595261/adult-census.csv")
 # Or use the local copy:
 # df = pd.read_csv('../datasets/adult-census.csv')
 
@@ -61,8 +60,7 @@ data.dtypes
 
 # %%
 categorical_columns = [
-    c for c in data.columns
-    if data[c].dtype.kind not in ["i", "f"]]
+    c for c in data.columns if data[c].dtype.kind not in ["i", "f"]]
 categorical_columns
 
 # %%
@@ -80,7 +78,6 @@ print(
 # The most intuitive strategy is to encode each category with a number.
 # The `OrdinalEncoder` will transform the data in such manner.
 
-
 # %%
 from sklearn.preprocessing import OrdinalEncoder
 
@@ -88,8 +85,7 @@ encoder = OrdinalEncoder()
 data_encoded = encoder.fit_transform(data_categorical)
 
 print(
-    f"The dataset encoded contains {data_encoded.shape[1]} features"
-)
+    f"The dataset encoded contains {data_encoded.shape[1]} features")
 data_encoded[:5]
 
 # %% [markdown]
@@ -142,16 +138,14 @@ from sklearn.preprocessing import OneHotEncoder
 encoder = OneHotEncoder(sparse=False)
 data_encoded = encoder.fit_transform(data_categorical)
 print(
-    f"The dataset encoded contains {data_encoded.shape[1]} features"
-)
+    f"The dataset encoded contains {data_encoded.shape[1]} features")
 data_encoded
 
 # %% [markdown]
 # Let's wrap this numpy array in a dataframe with informative column names as provided by the encoder object:
 
 # %%
-columns_encoded = encoder.get_feature_names(
-    data_categorical.columns)
+columns_encoded = encoder.get_feature_names(data_categorical.columns)
 pd.DataFrame(data_encoded, columns=columns_encoded).head()
 
 # %% [markdown]
@@ -178,9 +172,7 @@ scores = cross_val_score(model, data_categorical, target)
 print(f"The different scores obtained are: \n{scores}")
 
 # %%
-print(
-    f"The accuracy is: {scores.mean():.3f} +/- {scores.std():.3f}"
-)
+print(f"The accuracy is: {scores.mean():.3f} +/- {scores.std():.3f}")
 
 # %% [markdown]
 # As you can see, this representation of the categorical variables of the data is slightly more predictive of the revenue than the numerical variables that we used previously.
@@ -192,7 +184,6 @@ print(
 #   the OrdinalEncoder instead. What do you observe?
 #
 # Use the dedicated notebook to do this exercise.
-
 
 # %% [markdown]
 # ## Using numerical and categorical variables together
@@ -222,15 +213,14 @@ print(
 #
 #
 
-
 # %%
 binary_encoding_columns = ['sex']
 one_hot_encoding_columns = [
-    'workclass', 'education', 'marital-status',
-    'occupation', 'relationship', 'race', 'native-country']
+    'workclass', 'education', 'marital-status', 'occupation',
+    'relationship', 'race', 'native-country']
 scaling_columns = [
-    'age', 'education-num', 'hours-per-week',
-    'capital-gain', 'capital-loss']
+    'age', 'education-num', 'hours-per-week', 'capital-gain',
+    'capital-loss']
 
 # %% [markdown]
 # We can now create our `ColumnTransfomer` by specifying a list of triplet
@@ -242,16 +232,12 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.compose import ColumnTransformer
 
 preprocessor = ColumnTransformer([
-    ('binary-encoder', OrdinalEncoder(),
-     binary_encoding_columns),
-    ('one-hot-encoder',
-     OneHotEncoder(handle_unknown='ignore'),
+    ('binary-encoder', OrdinalEncoder(), binary_encoding_columns),
+    ('one-hot-encoder', OneHotEncoder(handle_unknown='ignore'),
      one_hot_encoding_columns),
-    ('standard-scaler', StandardScaler(),
-     scaling_columns)])
+    ('standard-scaler', StandardScaler(), scaling_columns)])
 model = make_pipeline(
-    preprocessor,
-    LogisticRegression(solver='lbfgs', max_iter=1000))
+    preprocessor, LogisticRegression(solver='lbfgs', max_iter=1000))
 
 # %% [markdown]
 # The final model is more complex than the previous models but still follows the
@@ -287,9 +273,7 @@ scores = cross_val_score(model, data, target, cv=5)
 print(f"The different scores obtained are: \n{scores}")
 
 # %%
-print(
-    f"The accuracy is: {scores.mean():.3f} +- {scores.std():.3f}"
-)
+print(f"The accuracy is: {scores.mean():.3f} +- {scores.std():.3f}")
 
 # %% [markdown]
 # The compound model has a higher predictive accuracy than the
@@ -319,15 +303,13 @@ from sklearn.ensemble import HistGradientBoostingClassifier
 # For each categorical column, extract the list of all possible categories
 # in some arbritrary order.
 categories = [
-    data[column].unique()
-    for column in data[categorical_columns]]
+    data[column].unique() for column in data[categorical_columns]]
 
 preprocessor = ColumnTransformer([
     ('categorical', OrdinalEncoder(categories=categories),
      categorical_columns),], remainder="passthrough")
 
-model = make_pipeline(preprocessor,
-                      HistGradientBoostingClassifier())
+model = make_pipeline(preprocessor, HistGradientBoostingClassifier())
 model.fit(data_train, target_train)
 print(model.score(data_test, target_test))
 
@@ -346,7 +328,6 @@ print(model.score(data_test, target_test))
 #
 #
 #
-
 
 # %% [markdown]
 # ## Exercise 2:

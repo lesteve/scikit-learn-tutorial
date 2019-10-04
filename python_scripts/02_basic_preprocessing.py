@@ -41,8 +41,7 @@
 import pandas as pd
 
 df = pd.read_csv(
-    "https://www.openml.org/data/get_csv/1595261/adult-census.csv"
-)
+    "https://www.openml.org/data/get_csv/1595261/adult-census.csv")
 
 # Or use the local copy:
 # df = pd.read_csv('../datasets/adult-census.csv')
@@ -100,8 +99,7 @@ data.dtypes
 
 # %%
 numerical_columns = [
-    c for c in data.columns
-    if data[c].dtype.kind in ["i", "f"]]
+    c for c in data.columns if data[c].dtype.kind in ["i", "f"]]
 numerical_columns
 
 # %%
@@ -147,10 +145,8 @@ start = time.time()
 model.fit(data_train, target_train)
 elapsed_time = time.time() - start
 
-print(
-    f"The model {model.__class__.__name__} was trained in "
-    f"{elapsed_time:.3f} seconds for {model.n_iter_} iterations"
-)
+print(f"The model {model.__class__.__name__} was trained in "
+      f"{elapsed_time:.3f} seconds for {model.n_iter_} iterations")
 
 # %% [markdown]
 # Let's ignore the convergence warning for now and instead let's try
@@ -177,9 +173,8 @@ predictions.head()
 # problem.
 
 # %%
-print(
-    f"The test accuracy using a {model.__class__.__name__} is "
-    f"{model.score(data_test, target_test):.3f}")
+print(f"The test accuracy using a {model.__class__.__name__} is "
+      f"{model.score(data_test, target_test):.3f}")
 
 # %% [markdown]
 # This is mathematically equivalent as computing the average number of time
@@ -217,8 +212,7 @@ elapsed_time = time.time() - start
 print(
     f"The accuracy using a {model.__class__.__name__} is "
     f"{model.score(data_test, target_test):.3f} with a fitting time of "
-    f"{elapsed_time:.3f} seconds in {model.n_iter_} iterations"
-)
+    f"{elapsed_time:.3f} seconds in {model.n_iter_} iterations")
 
 # %% [markdown]
 # We can observe now a longer training time but not significant improvement in
@@ -244,8 +238,8 @@ data_train_scaled = scaler.fit_transform(data_train)
 data_train_scaled
 
 # %%
-data_train_scaled = pd.DataFrame(
-    data_train_scaled, columns=data_train.columns)
+data_train_scaled = pd.DataFrame(data_train_scaled,
+                                 columns=data_train.columns)
 data_train_scaled.describe()
 
 # %%
@@ -261,8 +255,7 @@ elapsed_time = time.time() - start
 print(
     f"The accuracy using a {model.__class__.__name__} is "
     f"{model.score(data_test, target_test):.3f} with a fitting time of "
-    f"{elapsed_time:.3f} seconds in {model[-1].n_iter_} iterations"
-)
+    f"{elapsed_time:.3f} seconds in {model[-1].n_iter_} iterations")
 
 # %% [markdown]
 # We can see that the training time and the number of iterations is much shorter
@@ -290,7 +283,6 @@ print(
 #
 #
 #
-
 
 # %%
 from sklearn.model_selection import cross_val_score
@@ -336,23 +328,21 @@ def plot_cv_indices(cv, X, y, ax, lw=20):
     # Generate the training/testing visualizations for each CV split
     for ii, (train, test) in enumerate(splits):
         # Fill in indices with the training/test groups
-        indices = np.zeros(shape=X.shape[0],
-                           dtype=np.int32)
+        indices = np.zeros(shape=X.shape[0], dtype=np.int32)
         indices[train] = 1
 
         # Visualize the results
-        ax.scatter(range(len(indices)), [ii + .5] *
-                   len(indices), c=indices, marker='_',
-                   lw=lw, cmap=cmap_cv, vmin=-.2, vmax=1.2)
+        ax.scatter(range(len(indices)), [ii + .5] * len(indices),
+                   c=indices, marker='_', lw=lw, cmap=cmap_cv,
+                   vmin=-.2, vmax=1.2)
 
     # Formatting
     yticklabels = list(range(n_splits))
     ax.set(yticks=np.arange(n_splits + 2) + .5,
            yticklabels=yticklabels, xlabel='Sample index',
-           ylabel="CV iteration", ylim=[
-               n_splits + .2, -.2], xlim=[0, 100])
-    ax.set_title('{}'.format(type(cv).__name__),
-                 fontsize=15)
+           ylabel="CV iteration", ylim=[n_splits + .2,
+                                        -.2], xlim=[0, 100])
+    ax.set_title('{}'.format(type(cv).__name__), fontsize=15)
     return ax
 
 

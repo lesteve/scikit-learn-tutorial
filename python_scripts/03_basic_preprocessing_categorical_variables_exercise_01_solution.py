@@ -40,8 +40,7 @@
 import pandas as pd
 
 df = pd.read_csv(
-    "https://www.openml.org/data/get_csv/1595261/adult-census.csv"
-)
+    "https://www.openml.org/data/get_csv/1595261/adult-census.csv")
 
 # Or use the local copy:
 # df = pd.read_csv('../datasets/adult-census.csv')
@@ -51,14 +50,12 @@ target_name = "class"
 target = df[target_name].to_numpy()
 data = df.drop(columns=[target_name, "fnlwgt"])
 categorical_columns = [
-    c for c in data.columns
-    if data[c].dtype.kind not in ["i", "f"]]
+    c for c in data.columns if data[c].dtype.kind not in ["i", "f"]]
 data_categorical = data[categorical_columns]
 
 # %%
 categories = [
-    data[column].unique()
-    for column in data[categorical_columns]]
+    data[column].unique() for column in data[categorical_columns]]
 
 categories
 
@@ -75,9 +72,7 @@ scores = cross_val_score(model, data_categorical, target)
 print(f"The different scores obtained are: \n{scores}")
 
 # %%
-print(
-    f"The accuracy is: {scores.mean():.3f} +- {scores.std():.3f}"
-)
+print(f"The accuracy is: {scores.mean():.3f} +- {scores.std():.3f}")
 
 # %% [markdown]
 # Using an arbitrary mapping from string labels to integers as done here causes the linear model to make bad assumptions on the relative ordering of  categories.
@@ -87,13 +82,10 @@ print(
 # %%
 from sklearn.dummy import DummyClassifier
 
-scores = cross_val_score(
-    DummyClassifier(strategy="most_frequent"),
-    data_categorical, target)
+scores = cross_val_score(DummyClassifier(strategy="most_frequent"),
+                         data_categorical, target)
 print(f"The different scores obtained are: \n{scores}")
-print(
-    f"The accuracy is: {scores.mean():.3f} +- {scores.std():.3f}"
-)
+print(f"The accuracy is: {scores.mean():.3f} +- {scores.std():.3f}")
 
 # %% [markdown]
 # By comparison, a categorical encoding that does not assume any ordering in the
@@ -107,6 +99,4 @@ model = make_pipeline(
     LogisticRegression(solver='lbfgs', max_iter=1000))
 scores = cross_val_score(model, data_categorical, target)
 print(f"The different scores obtained are: \n{scores}")
-print(
-    f"The accuracy is: {scores.mean():.3f} +- {scores.std():.3f}"
-)
+print(f"The accuracy is: {scores.mean():.3f} +- {scores.std():.3f}")

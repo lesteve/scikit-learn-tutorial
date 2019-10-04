@@ -40,8 +40,7 @@
 import pandas as pd
 
 df = pd.read_csv(
-    "https://www.openml.org/data/get_csv/1595261/adult-census.csv"
-)
+    "https://www.openml.org/data/get_csv/1595261/adult-census.csv")
 
 # Or use the local copy:
 # df = pd.read_csv('../datasets/adult-census.csv')
@@ -51,8 +50,7 @@ target_name = "class"
 target = df[target_name].to_numpy()
 data = df.drop(columns=[target_name, "fnlwgt"])
 categorical_columns = [
-    c for c in data.columns
-    if data[c].dtype.kind not in ["i", "f"]]
+    c for c in data.columns if data[c].dtype.kind not in ["i", "f"]]
 data_categorical = data[categorical_columns]
 
 # %%
