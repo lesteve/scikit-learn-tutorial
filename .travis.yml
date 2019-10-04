@@ -10,6 +10,6 @@ install:
     - conda create -n testenv --yes pip python=3.6
     - conda activate testenv
     - pip install -r requirements.txt
-    - pip install jupytext
+    - pip install jupytext yapf docformatter
 script:
     - make --always-make
