@@ -77,6 +77,7 @@ print(
 # number. The `OrdinalEncoder` will transform the data in such
 # manner.
 
+
 # %%
 from sklearn.preprocessing import OrdinalEncoder
 
@@ -193,6 +194,7 @@ print(f"The accuracy is: {scores.mean():.3f} +/- {scores.std():.3f}")
 #
 # Use the dedicated notebook to do this exercise.
 
+
 # %% [markdown]
 # ## Using numerical and categorical variables together
 #
@@ -216,6 +218,7 @@ print(f"The accuracy is: {scores.mean():.3f} +/- {scores.std():.3f}")
 #   one additional column for each possible categorical value.
 # * **numerical scaling** numerical features which will be
 #   standardized.
+
 
 # %%
 binary_encoding_columns = ['sex']
@@ -331,6 +334,7 @@ print(model.score(data_test, target_test))
 #
 # This explains why Gradient Boosted Machines are very popular
 # among datascience practitioners who work with tabular data.
+
 
 # %% [markdown]
 # ## Exercise 2:
