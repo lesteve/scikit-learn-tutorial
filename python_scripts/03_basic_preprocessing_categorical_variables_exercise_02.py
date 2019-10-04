@@ -13,20 +13,19 @@
 #     name: python3
 # ---
 
-
 # %% [markdown]
 # # Exercise 03
 #
 # The goal of this exercise is to evaluate the impact of feature
-# preprocessing on a pipeline that uses a  decision-tree-based classifier
-# instead of logistic regression.
+# preprocessing on a pipeline that uses a  decision-tree-based
+# classifier instead of logistic regression.
 #
-# - The first question is to empirically evaluate whether scaling numerical
-#   feature is helpful or not;
+# - The first question is to empirically evaluate whether scaling
+#   numerical feature is helpful or not;
 #
-# - The second question is to evaluate whether it is empirically better
-#   (both from a computational and a statistical perspective) to use integer
-#   coded or one-hot encoded categories.
+# - The second question is to evaluate whether it is empirically
+#   better (both from a computational and a statistical perspective)
+#   to use integer coded or one-hot encoded categories.
 
 # %%
 import pandas as pd
@@ -40,7 +39,8 @@ from sklearn.ensemble import HistGradientBoostingClassifier
 df = pd.read_csv(
     "https://www.openml.org/data/get_csv/1595261/adult-census.csv")
 
-# Or use the local copy: df = pd.read_csv('../datasets/adult-census.csv')
+# Or use the local copy: df = pd.read_csv('../datasets/adult-
+# census.csv')
 
 # %%
 target_name = "class"
@@ -59,8 +59,8 @@ categories = [
 # %% [markdown]
 # ## Reference pipeline (no numerical scaling and integer-coded categories)
 #
-# First let's time the pipeline we used in the main notebook to serve as a
-# reference:
+# First let's time the pipeline we used in the main notebook to
+# serve as a reference:
 
 # %%
 # %%time
@@ -77,8 +77,8 @@ print(f"The accuracy is: {scores.mean():.3f} +- {scores.std():.3f}")
 # %% [markdown]
 # ## Scaling numerical features
 #
-# Let's write a similar pipeline that also scales the numerical features
-# using `StandardScaler` (or similar):
+# Let's write a similar pipeline that also scales the numerical
+# features using `StandardScaler` (or similar):
 
 # %%
 # TODO write me!
@@ -86,16 +86,19 @@ print(f"The accuracy is: {scores.mean():.3f} +- {scores.std():.3f}")
 # %% [markdown]
 # ## One-hot encoding of categorical variables
 #
-# For linear models, we have observed that integer coding of categorical
-# variables can be very detrimental. However for
-# `HistGradientBoostingClassifier` models, it does not seem to be the case as
-# the cross-validation of the reference pipeline with `OrdinalEncoder` is good.
+# For linear models, we have observed that integer coding of
+# categorical variables can be very detrimental. However for
+# `HistGradientBoostingClassifier` models, it does not seem to be the
+# case as the cross-validation of the reference pipeline with
+# `OrdinalEncoder` is good.
 #
-# Let's see if we can get an even better accuracy with `OneHotEncoding`.
+# Let's see if we can get an even better accuracy with
+# `OneHotEncoding`.
 #
-# Hint: `HistGradientBoostingClassifier` does not yet support sparse input
-# data. You might want to use `OneHotEncoder(handle_unknown="ignore",
-# sparse=False)` to force the use a dense representation as a workaround.
+# Hint: `HistGradientBoostingClassifier` does not yet support
+# sparse input data. You might want to use
+# `OneHotEncoder(handle_unknown="ignore", sparse=False)` to force the
+# use a dense representation as a workaround.
 
 # %%
 # TODO: write me!
