@@ -9,13 +9,16 @@
 #       jupytext_version: 1.2.3
 # ---
 
+
 # %% [markdown]
-# In this notebook, we will look at necessary steps that happen before any machine learning takes place.
+# In this notebook, we will look at necessary steps that happen before any
+# machine learning takes place.
 # * load the data
 # * look at the variables in the dataset, in particular make the difference
 #   between numerical and categorical variables, which need different
 #   preprocessing in most machine learning workflows
-# * visualize the distribution of the variables to gain some insights into the dataset.
+# * visualize the distribution of the variables to gain some insights into
+#   the dataset.
 
 # %%
 # Inline plots
@@ -28,8 +31,8 @@ import seaborn as sns
 # ## Loading the adult census dataset
 
 # %% [markdown]
-# We will use data from the "Current Population adult_census" from 1994 that we
-# downloaded from [OpenML](http://openml.org/).
+# We will use data from the "Current Population adult_census" from 1994 that
+# we downloaded from [OpenML](http://openml.org/).
 
 # %%
 import pandas as pd
@@ -37,8 +40,8 @@ import pandas as pd
 adult_census = pd.read_csv(
     "https://www.openml.org/data/get_csv/1595261/adult-census.csv")
 
-# Or use the local copy:
-# adult_census = pd.read_csv('../datasets/adult-census.csv')
+# Or use the local copy: adult_census = pd.read_csv('../datasets/adult-
+# census.csv')
 
 # %% [markdown]
 # We can look at the OpenML webpage to know more about this dataset.
@@ -88,9 +91,9 @@ all_columns = numerical_columns + categorical_columns + [
 adult_census = adult_census[all_columns]
 
 # %% [markdown]
-# Note that for simplicity, we have ignored the "fnlwgt" (final weight) column
-# that was crafted by the creators of the dataset when sampling the dataset to
-# be representative of the full census database.
+# Note that for simplicity, we have ignored the "fnlwgt" (final weight)
+# column that was crafted by the creators of the dataset when sampling the
+# dataset to be representative of the full census database.
 
 # %% [markdown]
 # ## Inspect the data
@@ -98,7 +101,8 @@ adult_census = adult_census[all_columns]
 # data:
 # * maybe the task you are trying to achieve can be solved without machine
 #   learning
-# * you need to check that the data you need for your task is indeed present in
+# * you need to check that the data you need for your task is indeed
+#   present in
 # the dataset
 # * inspecting the data is a good way to find peculiarities. These can can
 #   arise in the data collection (for example, malfunctioning sensor or missing
@@ -106,21 +110,22 @@ adult_census = adult_census[all_columns]
 #   values).
 
 # %% [markdown]
-# Let's look at the distribution of individual variables, to get some insights
-# about the data. We can start by plotting histograms, note that this only
-# works for numerical variables:
+# Let's look at the distribution of individual variables, to get some
+# insights about the data. We can start by plotting histograms, note that this
+# only works for numerical variables:
 
 # %%
 adult_census.hist(figsize=(20, 10))
 
 # %% [markdown]
 # We can already make a few comments about some of the variables:
-# * age: there are not that many points for 'age > 70'. The dataset description
-# does indicate that retired people have been filtered out (`hours-per-week > 0`).
+# * age: there are not that many points for 'age > 70'. The dataset
+#   description does indicate that retired people have been filtered out
+#   (`hours-per-week > 0`).
 # * education-num: peak at 10 and 13, hard to tell what it corresponds to
-# without looking much further. We'll do that later in this notebook.
-# * hours per week at 40, this was very likely the standard of working hours at
-# the time of the data collection
+#   without looking much further. We'll do that later in this notebook.
+# * hours per week at 40, this was very likely the standard of working
+#   hours at the time of the data collection
 # * most values of capital-gain and capital-loss are close to zero
 
 # %% [markdown]
@@ -133,8 +138,8 @@ adult_census['sex'].value_counts()
 adult_census['education'].value_counts()
 
 # %% [markdown]
-# `pandas_profiling` is a nice tool for inspecting the data (both numerical and
-# categorical variables).
+# `pandas_profiling` is a nice tool for inspecting the data (both numerical
+# and categorical variables).
 
 # %%
 import pandas_profiling
@@ -142,19 +147,19 @@ adult_census.profile_report()
 
 # %% [markdown]
 # As noted above, `education-num` distribution has two clear peaks around 10
-# and 13. It would be reasonable to expect that 'education-num' is the number of
-# years of education. Let's look at the relationship between education and
+# and 13. It would be reasonable to expect that 'education-num' is the number
+# of years of education. Let's look at the relationship between education and
 # education-num.
 # %%
 pd.crosstab(index=adult_census['education'],
             columns=adult_census['education-num'])
 
 # %% [markdown]
-# This shows that education and education-num are redundant. For
-# example, `education-num=2` is equivalent to `education='1st-4th'`. In
-# practice that means we can remove `education-num` without losing information.
-# Note that having redundant (or highly correlated) columns can be a problem
-# for machine learning algorithms.
+# This shows that education and education-num are redundant. For example,
+# `education-num=2` is equivalent to `education='1st-4th'`. In practice that
+# means we can remove `education-num` without losing information. Note that
+# having redundant (or highly correlated) columns can be a problem for machine
+# learning algorithms.
 
 # %% [markdown]
 # Another way to inspect the data is to do a pairplot and show how variable
@@ -176,19 +181,22 @@ sns.pairplot(data=adult_census[:n_samples_to_plot], x_vars='age',
 
 # %% [markdown]
 #
-# By looking at the data you could infer some hand-written rules to predict the
-# class:
-# * if you are young (less than 25 year-old roughly), you are in the `<= 50K` class.
-# * if you are old (more than 70 year-old roughly), you are in the `<= 50K` class.
-# * if you work part-time (less than 40 hours roughly) you are in the `<= 50K` class.
+# By looking at the data you could infer some hand-written rules to predict
+# the class:
+# * if you are young (less than 25 year-old roughly), you are in the `<=
+#   50K` class.
+# * if you are old (more than 70 year-old roughly), you are in the `<= 50K`
+#   class.
+# * if you work part-time (less than 40 hours roughly) you are in the `<=
+#   50K` class.
 #
-# These hand-written rules could work reasonably well without the need for any
-# machine learning. Note however that it is not very easy to create rules for
-# the region `40 < hours-per-week < 60` and `30 < age < 70`. We can hope that
-# machine learning can help in this region. Also note that visualization can
-# help creating hand-written rules but is limited to 2 dimensions (maybe 3
-# dimensions), whereas machine learning models can build models in
-# high-dimensional spaces.
+# These hand-written rules could work reasonably well without the need for
+# any machine learning. Note however that it is not very easy to create rules
+# for the region `40 < hours-per-week < 60` and `30 < age < 70`. We can hope
+# that machine learning can help in this region. Also note that visualization
+# can help creating hand-written rules but is limited to 2 dimensions (maybe 3
+# dimensions), whereas machine learning models can build models in high-
+# dimensional spaces.
 #
 # Another thing worth mentioning in this plot: if you are young (less than 25
 # year-old roughly) you tend to work less and if you are old (more than 70
@@ -291,8 +299,8 @@ plot_tree_decision_function(tree, X, y, ax=ax)
 #   earning `<= 50K`.
 # * the persons older than 28.5 and working more than 40.5 hours-per-week
 #   will be considered in the class earning `> 50K`, while the one working
-#   below 40.5 hours-per-week, will be considered in the class
-#   earning `<= 50K`.
+#   below 40.5 hours-per-week, will be considered in the class earning `<=
+#   50K`.
 
 # %% [markdown]
 #
@@ -300,6 +308,7 @@ plot_tree_decision_function(tree, X, y, ax=ax)
 # * loaded the data from a CSV file using `pandas`
 # * looked at the kind of variables in the dataset, and make the difference
 #   between categorical and numerical variables.
-# * inspected the data with `pandas`, `seaborn` and `pandas_profiling`. Data inspection
-#   can allow you to decide whether using machine learning is appropriate for
-#   your data and to notice potential peculiarities in your data.
+# * inspected the data with `pandas`, `seaborn` and `pandas_profiling`.
+#   Data inspection can allow you to decide whether using machine learning is
+#   appropriate for your data and to notice potential peculiarities in your
+#   data.

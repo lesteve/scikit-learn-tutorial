@@ -13,12 +13,17 @@
 #     name: python3
 # ---
 
+
 # %% [markdown]
 # #  Exercise 01
 #
-# The goal of is to compare the performance of our classifier (81% accuracy) to some baseline classifiers that  would ignore the input data and instead make constant predictions.
+# The goal of is to compare the performance of our classifier (81% accuracy)
+# to some baseline classifiers that  would ignore the input data and instead
+# make constant predictions.
 #
-# The online [documentation for DummyClassifier](https://scikit-learn.org/stable/modules/model_evaluation.html#dummy-estimators) gives instructions on how to use it.
+# The online [documentation for DummyClassifier](https://scikit-
+# learn.org/stable/modules/model_evaluation.html#dummy-estimators) gives
+# instructions on how to use it.
 
 # %%
 import pandas as pd

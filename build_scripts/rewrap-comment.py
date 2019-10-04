@@ -4,11 +4,14 @@ import operator
 import sys
 import textwrap
 
+# TODO: this should be a parameter when executing the script
+MAX_WIDTH = 69
+
 directory = sys.argv[1]
 
 for path, subdirs, files in os.walk(directory):
     for filename in files:
-        path_file = os.path.abspath(os.join.path(path, filename))
+        path_file = os.path.abspath(os.path.join(path, filename))
         formatted_code = []
 
         with open(path_file, "r") as f:
@@ -18,8 +21,10 @@ for path, subdirs, files in os.walk(directory):
             ]
             grouped_line_number = []
             for k, g in itertools.groupby(enumerate(line_number_comment),
-                                        key=lambda x: x[0] - x[1]):
-                grouped_line_number.append(list(map(operator.itemgetter(1), g)))
+                                          key=lambda x: x[0] - x[1]):
+                grouped_line_number.append(
+                    list(map(operator.itemgetter(1), g))
+                )
             for gln_idx, gln in enumerate(grouped_line_number):
                 # do not format the python code
                 if gln_idx > 0:
@@ -43,8 +48,10 @@ for path, subdirs, files in os.walk(directory):
                     link_chars = ['# [', '# !']
                     table_chars = ['# |']
                     html_chars = ['# <']
-                    untouched_chars = tuple(cell_chars + header_chars + link_chars +
-                                            table_chars + html_chars)
+                    untouched_chars = tuple(
+                        cell_chars + header_chars + link_chars + table_chars +
+                        html_chars
+                    )
 
                     comment_block = []
                     line_discarded = []
@@ -65,7 +72,7 @@ for path, subdirs, files in os.walk(directory):
                                 else:
                                     break
                             block = "".join(block)
-                            block = textwrap.wrap(block, width=75)
+                            block = textwrap.wrap(block, width=MAX_WIDTH - 4)
                             block = "\n#   ".join(block)
                         else:
                             block.append(line)
@@ -78,7 +85,7 @@ for path, subdirs, files in os.walk(directory):
                                 else:
                                     break
                             block = "".join(block)
-                            block = textwrap.wrap(block, width=77)
+                            block = textwrap.wrap(block, width=MAX_WIDTH - 2)
                             block = "\n# ".join(block)
 
                         comment_block.append(block)

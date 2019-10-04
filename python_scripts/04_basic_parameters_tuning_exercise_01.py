@@ -13,6 +13,7 @@
 #     name: python3
 # ---
 
+
 # %% [markdown]
 # #  Exercise 01
 # The goal is to find the best set of hyper-parameters which maximize the
@@ -35,8 +36,7 @@ from scipy.stats import randint
 
 df = pd.read_csv(
     "https://www.openml.org/data/get_csv/1595261/adult-census.csv")
-# Or use the local copy:
-# df = pd.read_csv('../datasets/adult-census.csv')
+# Or use the local copy: df = pd.read_csv('../datasets/adult-census.csv')
 
 target_name = "class"
 target = df[target_name].to_numpy()
@@ -46,8 +46,7 @@ df_train, df_test, target_train, target_test = train_test_split(
     data, target, random_state=42)
 
 # %% [markdown]
-# TODO: write your solution here
-# You should:
+# TODO: write your solution here You should:
 # - create a preprocessor using an `OrdinalEncoder`
 # - use a `HistGradientBoostingClassifier` to make predictions
 # - use a `RandomizedSearchCV` to find the best set of hyper-parameters by

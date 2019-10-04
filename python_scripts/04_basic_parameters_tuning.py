@@ -13,14 +13,15 @@
 #     name: python3
 # ---
 
+
 # %% [markdown]
 # # Introduction to scikit-learn: basic model hyper-parameters tuning
 #
 # The process to learn a predictive model is driven by a set of internal
 # parameters and a set of training data. These internal parameters are called
-# hyper-parameters and are specific for each family of models. In addition,
-# a set of parameters are optimal for a specific dataset and thus they need
-# to be optimized.
+# hyper-parameters and are specific for each family of models. In addition, a
+# set of parameters are optimal for a specific dataset and thus they need to be
+# optimized.
 #
 # This notebook shows:
 # * the influence of changing model parameters;
@@ -33,8 +34,7 @@ import pandas as pd
 
 df = pd.read_csv(
     "https://www.openml.org/data/get_csv/1595261/adult-census.csv")
-# Or use the local copy:
-# df = pd.read_csv('../datasets/adult-census.csv')
+# Or use the local copy: df = pd.read_csv('../datasets/adult-census.csv')
 
 # %%
 target_name = "class"
@@ -55,8 +55,8 @@ df_train, df_test, target_train, target_test = train_test_split(
     data, target, random_state=42)
 
 # %% [markdown]
-# Then, we define the preprocessing pipeline to transform differently
-# the numerical and categorical data.
+# Then, we define the preprocessing pipeline to transform differently the
+# numerical and categorical data.
 
 # %%
 from sklearn.compose import ColumnTransformer
@@ -134,9 +134,9 @@ print(f"The accuracy score using a {model.__class__.__name__} is "
 #
 # In short, we will set the parameter, train our model on some data, and
 # evaluate the model performance on some left out data. Ideally, we will select
-# the parameter leading to the optimal performance on the testing set.
-# Scikit-learn provides a `GridSearchCV` estimator which will handle the
-# cross-validation and hyper-parameter search for us.
+# the parameter leading to the optimal performance on the testing set. Scikit-
+# learn provides a `GridSearchCV` estimator which will handle the cross-
+# validation and hyper-parameter search for us.
 
 # %%
 from sklearn.model_selection import GridSearchCV
@@ -244,47 +244,42 @@ print(f"Time elapsed to train LogisticRegressionCV: "
 
 # %% [markdown]
 # The `fit` time for the `CV` version of `LogisticRegression` give a speed-up
-# x2. This speed-up is provided by re-using the values of coefficients to
-# warm-start the estimator for the different `C` values.
+# x2. This speed-up is provided by re-using the values of coefficients to warm-
+# start the estimator for the different `C` values.
 
 # %% [markdown]
 # ## Exercises:
 #
-# - Build a machine learning pipeline:
-#       * preprocess the categorical columns using an `OrdinalEncoder` and let
-#         the numerical columns as they are.
-#       * use an `HistGradientBoostingClassifier` as a predictive model.
-# - Make an hyper-parameters search using `RandomizedSearchCV` and tuning the
-#   parameters:
-#       * `learning_rate` with values ranging from 0.001 to 0.5. You can use
-#         an exponential distribution to sample the possible values.
-#       * `l2_regularization` with values ranging from 0 to 0.5. You can use
-#         a uniform distribution.
-#       * `max_lead_nodes` with values ranging from 5 to 30. The values should
-#         be integer following a uniform distribution.
-#       * `min_samples_leaf` with values ranging from 5 to 30. The values
-#         should be integer following a uniform distribution.
+# - Build a machine learning pipeline:     * preprocess the categorical
+#   columns using an `OrdinalEncoder` and let       the numerical columns as
+#   they are.     * use an `HistGradientBoostingClassifier` as a predictive
+#   model.
+# - Make an hyper-parameters search using `RandomizedSearchCV` and tuning
+#   the parameters:     * `learning_rate` with values ranging from 0.001 to
+#   0.5. You can use       an exponential distribution to sample the possible
+#   values.     * `l2_regularization` with values ranging from 0 to 0.5. You
+#   can use       a uniform distribution.     * `max_lead_nodes` with values
+#   ranging from 5 to 30. The values should       be integer following a
+#   uniform distribution.     * `min_samples_leaf` with values ranging from 5
+#   to 30. The values       should be integer following a uniform distribution.
 #
 # In case you have issues of with unknown categories, try to precompute the
 # list of possible categories ahead of time and pass it explicitly to the
 # constructor of the encoder:
 #
-# ```python
-# categories = [data[column].unique()
-#               for column in data[categorical_columns]]
-# OrdinalEncoder(categories=categories)
-# ```
+# ```python categories = [data[column].unique()               for column in
+# data[categorical_columns]] OrdinalEncoder(categories=categories) ```
 
 # %% [markdown]
 # ## Combining evaluation and hyper-parameters search
 #
 # Cross-validation was used for searching the best model parameters. We
 # previously evaluate model performance through cross-validation as well. If we
-# would like to combine both aspects, we need to perform a "nested"
-# cross-validation. The "outer" cross-validation is applied to assess the
-# model while the "inner" cross-validation set the hyper-parameters of the
-# model on the data set provided by the "outer" cross-validation. In practice,
-# it is equivalent of including, `GridSearchCV`, `RandomSearchCV`, or any
+# would like to combine both aspects, we need to perform a "nested" cross-
+# validation. The "outer" cross-validation is applied to assess the model while
+# the "inner" cross-validation set the hyper-parameters of the model on the
+# data set provided by the "outer" cross-validation. In practice, it is
+# equivalent of including, `GridSearchCV`, `RandomSearchCV`, or any
 # `EstimatorCV` in a `cross_val_score` or `cross_validate` function call.
 
 # %%
@@ -300,7 +295,7 @@ print(
 print(f"The different scores obtained are: \n{score}")
 
 # %% [markdown]
-# Be aware that such training might involve a variation of the hyper-parameters
-# of the model. When analyzing such model, you should not only look at the
-# overall model performance but look at the hyper-parameters variations as
-# well.
+# Be aware that such training might involve a variation of the hyper-
+# parameters of the model. When analyzing such model, you should not only look
+# at the overall model performance but look at the hyper-parameters variations
+# as well.
