@@ -175,13 +175,14 @@ pd.crosstab(index=adult_census['education'],
 n_samples_to_plot = 5000
 columns = ['age', 'education-num', 'hours-per-week']
 _ = sns.pairplot(data=adult_census[:n_samples_to_plot], vars=columns,
-                 hue=target_column, plot_kws={'alpha': 0.2}, height=4,
-                 diag_kind='hist')
+                 hue=target_column, plot_kws={'alpha': 0.2},
+                 height=4, diag_kind='hist')
 
 # %%
 _ = sns.pairplot(data=adult_census[:n_samples_to_plot], x_vars='age',
                  y_vars='hours-per-week', hue=target_column,
-                 markers=['o', 'v'], plot_kws={'alpha': 0.2}, height=12)
+                 markers=['o',
+                          'v'], plot_kws={'alpha': 0.2}, height=12)
 
 # %% [markdown]
 #
