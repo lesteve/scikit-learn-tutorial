@@ -34,3 +34,4 @@ sanity_check_$(RENDERED_NOTEBOOKS_DIR):
 formatting:
 	yapf --recursive --in-place --parallel $(PYTHON_SCRIPTS_DIR)
 	docformatter --recursive --in-place $(PYTHON_SCRIPTS_DIR)
+	python build_scripts/rewrap-comment.py $(PYTHON_SCRIPTS_DIR)
