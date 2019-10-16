@@ -5,7 +5,7 @@ before_install:
     - chmod +x miniconda.sh
     - ./miniconda.sh -b -p $MINICONDA_PATH
     - source $MINICONDA_PATH/etc/profile.d/conda.sh
-    - conda update --yes --quiet conda
+    # - conda update --yes --quiet conda
 install:
     - conda create -n testenv --yes pip python=3.6
     - conda activate testenv
