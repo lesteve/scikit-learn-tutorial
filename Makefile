@@ -13,7 +13,7 @@ $(NOTEBOOKS_DIR): sanity_check_$(PYTHON_SCRIPTS_DIR) $(MINIMAL_NOTEBOOK_FILES) s
 
 $(RENDERED_NOTEBOOKS_DIR): $(MINIMAL_RENDERED_NOTEBOOK_FILES) sanity_check_$(RENDERED_NOTEBOOKS_DIR)
 
-$(NOTEBOOKS_DIR)/%.ipynb: $(PYTHON_SCRIPTS_DIR)/%.py
+$(NOTEBOOKS_DIR)/%.ipynb: format-code $(PYTHON_SCRIPTS_DIR)/%.py
 	jupytext --set-formats $(PYTHON_SCRIPTS_DIR)//py:percent,$(NOTEBOOKS_DIR)//ipynb $<
 	jupytext --sync $<
 
