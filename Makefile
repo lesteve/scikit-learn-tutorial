@@ -2,6 +2,7 @@ PYTHON_SCRIPTS_DIR = python_scripts
 NOTEBOOKS_DIR = notebooks
 RENDERED_NOTEBOOKS_DIR = rendered_notebooks
 JUPYTER_KERNEL := python3
+PYTHON_FILES = $(shell ls $(PYTHON_SCRIPTS_DIR)/*.py)
 MINIMAL_NOTEBOOK_FILES = $(shell ls $(PYTHON_SCRIPTS_DIR)/*.py | perl -pe "s@$(PYTHON_SCRIPTS_DIR)@$(NOTEBOOKS_DIR)@" | perl -pe "s@\.py@.ipynb@")
 MINIMAL_RENDERED_NOTEBOOK_FILES = $(shell ls $(PYTHON_SCRIPTS_DIR)/*.py | perl -pe "s@$(PYTHON_SCRIPTS_DIR)@$(RENDERED_NOTEBOOKS_DIR)@" | perl -pe "s@\.py@.ipynb@")
 
@@ -24,10 +25,11 @@ $(RENDERED_NOTEBOOKS_DIR)/%.ipynb: $(NOTEBOOKS_DIR)/%.ipynb
 
 sanity_check_$(PYTHON_SCRIPTS_DIR):
 	python build_scripts/check-python-scripts.py $(PYTHON_SCRIPTS_DIR)
+	yapf --recursive --in-place --parallel $(PYTHON_SCRIPTS_DIR)
+	flake8 --select E501 --show-source $(PYTHON_SCRIPTS_DIR)
 
 sanity_check_$(NOTEBOOKS_DIR):
 	python build_scripts/sanity-check.py $(PYTHON_SCRIPTS_DIR) $(NOTEBOOKS_DIR)
 
 sanity_check_$(RENDERED_NOTEBOOKS_DIR):
 	python build_scripts/sanity-check.py $(NOTEBOOKS_DIR) $(RENDERED_NOTEBOOKS_DIR)
-
