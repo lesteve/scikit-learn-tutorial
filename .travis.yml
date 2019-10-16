@@ -5,6 +5,8 @@ before_install:
     - chmod +x miniconda.sh
     - ./miniconda.sh -b -p $MINICONDA_PATH
     - source $MINICONDA_PATH/etc/profile.d/conda.sh
+    # TODO: it is currently failing on travis because conda wants to remove
+    # setuptools which is a dependency of conda.
     # - conda update --yes --quiet conda
 install:
     - conda create -n testenv --yes pip python=3.6
