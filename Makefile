@@ -2,6 +2,7 @@ PYTHON_SCRIPTS_DIR = python_scripts
 NOTEBOOKS_DIR = notebooks
 RENDERED_NOTEBOOKS_DIR = rendered_notebooks
 JUPYTER_KERNEL := python3
+PYTHON_FILES = $(shell ls $(PYTHON_SCRIPTS_DIR)/*.py)
 MINIMAL_NOTEBOOK_FILES = $(shell ls $(PYTHON_SCRIPTS_DIR)/*.py | perl -pe "s@$(PYTHON_SCRIPTS_DIR)@$(NOTEBOOKS_DIR)@" | perl -pe "s@\.py@.ipynb@")
 MINIMAL_RENDERED_NOTEBOOK_FILES = $(shell ls $(PYTHON_SCRIPTS_DIR)/*.py | perl -pe "s@$(PYTHON_SCRIPTS_DIR)@$(RENDERED_NOTEBOOKS_DIR)@" | perl -pe "s@\.py@.ipynb@")
 
@@ -13,7 +14,7 @@ $(NOTEBOOKS_DIR): sanity_check_$(PYTHON_SCRIPTS_DIR) $(MINIMAL_NOTEBOOK_FILES) s
 
 $(RENDERED_NOTEBOOKS_DIR): $(MINIMAL_RENDERED_NOTEBOOK_FILES) sanity_check_$(RENDERED_NOTEBOOKS_DIR)
 
-$(NOTEBOOKS_DIR)/%.ipynb: format-code $(PYTHON_SCRIPTS_DIR)/%.py
+$(NOTEBOOKS_DIR)/%.ipynb: $(PYTHON_SCRIPTS_DIR)/%.py
 	jupytext --set-formats $(PYTHON_SCRIPTS_DIR)//py:percent,$(NOTEBOOKS_DIR)//ipynb $<
 	jupytext --sync $<
 
@@ -24,6 +25,7 @@ $(RENDERED_NOTEBOOKS_DIR)/%.ipynb: $(NOTEBOOKS_DIR)/%.ipynb
 
 sanity_check_$(PYTHON_SCRIPTS_DIR):
 	python build_scripts/check-python-scripts.py $(PYTHON_SCRIPTS_DIR)
+	yapf --recursive --in-place --parallel $(PYTHON_SCRIPTS_DIR)
 
 sanity_check_$(NOTEBOOKS_DIR):
 	python build_scripts/sanity-check.py $(PYTHON_SCRIPTS_DIR) $(NOTEBOOKS_DIR)
@@ -31,9 +33,6 @@ sanity_check_$(NOTEBOOKS_DIR):
 sanity_check_$(RENDERED_NOTEBOOKS_DIR):
 	python build_scripts/sanity-check.py $(NOTEBOOKS_DIR) $(RENDERED_NOTEBOOKS_DIR)
 
-format-code:
-	yapf --recursive --in-place --parallel $(PYTHON_SCRIPTS_DIR)
-
-format-comment:
+format_comment:
 	python build_scripts/rewrap-comment.py $(PYTHON_SCRIPTS_DIR)
 	docformatter --recursive --in-place $(PYTHON_SCRIPTS_DIR)
