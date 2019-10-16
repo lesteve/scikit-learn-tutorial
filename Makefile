@@ -2,7 +2,6 @@ PYTHON_SCRIPTS_DIR = python_scripts
 NOTEBOOKS_DIR = notebooks
 RENDERED_NOTEBOOKS_DIR = rendered_notebooks
 JUPYTER_KERNEL := python3
-PYTHON_FILES = $(shell ls $(PYTHON_SCRIPTS_DIR)/*.py)
 MINIMAL_NOTEBOOK_FILES = $(shell ls $(PYTHON_SCRIPTS_DIR)/*.py | perl -pe "s@$(PYTHON_SCRIPTS_DIR)@$(NOTEBOOKS_DIR)@" | perl -pe "s@\.py@.ipynb@")
 MINIMAL_RENDERED_NOTEBOOK_FILES = $(shell ls $(PYTHON_SCRIPTS_DIR)/*.py | perl -pe "s@$(PYTHON_SCRIPTS_DIR)@$(RENDERED_NOTEBOOKS_DIR)@" | perl -pe "s@\.py@.ipynb@")
 
