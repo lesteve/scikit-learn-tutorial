@@ -35,8 +35,8 @@ from sklearn.ensemble import HistGradientBoostingClassifier
 df = pd.read_csv(
     "https://www.openml.org/data/get_csv/1595261/adult-census.csv")
 
-# Or use the local copy: df = pd.read_csv('../datasets/adult-
-# census.csv')
+# Or use the local copy:
+# df = pd.read_csv('../datasets/adult-census.csv')
 
 # %%
 target_name = "class"
