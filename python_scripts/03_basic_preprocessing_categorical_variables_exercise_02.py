@@ -63,7 +63,7 @@ categories = [
 
 preprocessor = ColumnTransformer([
     ('categorical', OrdinalEncoder(categories=categories),
-     categorical_columns),], remainder="passthrough")
+     categorical_columns)], remainder="passthrough")
 
 model = make_pipeline(preprocessor, HistGradientBoostingClassifier())
 scores = cross_val_score(model, data, target)

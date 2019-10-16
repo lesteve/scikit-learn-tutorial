@@ -68,7 +68,7 @@ categories = [
 
 preprocessor = ColumnTransformer([
     ('categorical', OrdinalEncoder(categories=categories),
-     categorical_columns),], remainder="passthrough")
+     categorical_columns)], remainder="passthrough")
 
 model = make_pipeline(preprocessor, HistGradientBoostingClassifier())
 scores = cross_val_score(model, data, target)
@@ -85,7 +85,7 @@ from sklearn.preprocessing import StandardScaler
 preprocessor = ColumnTransformer([
     ('numerical', StandardScaler(), numerical_columns),
     ('categorical', OrdinalEncoder(categories=categories),
-     categorical_columns),])
+     categorical_columns)])
 
 model = make_pipeline(preprocessor, HistGradientBoostingClassifier())
 scores = cross_val_score(model, data, target)
@@ -122,7 +122,7 @@ from sklearn.preprocessing import OneHotEncoder
 preprocessor = ColumnTransformer([
     ('categorical',
      OneHotEncoder(handle_unknown="ignore", sparse=False),
-     categorical_columns),], remainder="passthrough")
+     categorical_columns)], remainder="passthrough")
 
 model = make_pipeline(preprocessor, HistGradientBoostingClassifier())
 scores = cross_val_score(model, data, target)

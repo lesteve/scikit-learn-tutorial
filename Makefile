@@ -26,6 +26,7 @@ $(RENDERED_NOTEBOOKS_DIR)/%.ipynb: $(NOTEBOOKS_DIR)/%.ipynb
 sanity_check_$(PYTHON_SCRIPTS_DIR):
 	python build_scripts/check-python-scripts.py $(PYTHON_SCRIPTS_DIR)
 	yapf --recursive --in-place --parallel $(PYTHON_SCRIPTS_DIR)
+	flake8 --select E501 --show-source $(PYTHON_SCRIPTS_DIR)
 
 sanity_check_$(NOTEBOOKS_DIR):
 	python build_scripts/sanity-check.py $(PYTHON_SCRIPTS_DIR) $(NOTEBOOKS_DIR)
