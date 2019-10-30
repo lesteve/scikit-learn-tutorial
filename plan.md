@@ -10,19 +10,45 @@ Note: to edit on HackMD https://hackmd.io/6fFy3_y6SOWonOYeGaNiHw?edit
 
 ## Content
 Why and when? Example applications.
+- Mention the iris example, as it forces to think about
+  measurement, but also because it has one class that is easy to separate
+  only one feature
+    - Aurelie: real irises for the video?
+- The "adult" dataset
+    - Maybe looking at it with excel, to be in an environment familiar to
+      people
 
 Descriptive vs predictive analysis
+- Generalization (Out of sample properties)
+- An example of where it makes a difference: if the data has redundant
+  variables, such as expressing the education level as the name of the
+  degree or the corresponding number of years of education
 
 Learning from data vs expertly engineered decision rules
+- One the iris example, show that cutting on one specific feature
+  separates well one class
 
 Generalization vs memorization: the need for a train / test split
+- The nearest neighbors example to illustrate this
 
 Supervised vs Unsupervised
+- Formalize supervised learning (define "X" and "y")
+- Introduce unsupervised learning, for instance dimensionality reduction
+  (and go back to the example of redundant variables: if we have many of
+  these, we should be able to reduce the problem without even looking at
+  y
 
 Regression vs Classification
+- In the adult data: it would make more sense to do a continuous
+  prediction
+- In the iris example, it is naturally a classification problem
 
 Features and samples
+- The data matrix
+  - Build the data matrix of Iris
 
+A few words about the style and scope of this course: it is centered
+around code, though we strive to keep it simple
 
 ## Quizz:
 Given a case study (e.g. pricing apartments based on a real estate website database) and sample toy dataset: say whether it’s an application of supervised vs unsupervised, classification vs regression, what are the features, what is the target variable, what is a record.
@@ -96,6 +122,8 @@ How to use variable selection and generalization to fight overfitting
 Feature engineering to limit underfitting
 
 ## Olivier: Overfitting/Underfitting validation curves, learning curves, regularisation with linear models
+
+- Video about overfitting?
 
 ## Loïc: Trees in depth + ensembles
 
