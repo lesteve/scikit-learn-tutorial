@@ -10,13 +10,17 @@ Note: to edit on HackMD https://hackmd.io/6fFy3_y6SOWonOYeGaNiHw?edit
 
 ## Content
 Why and when? Example applications.
-- Mention the iris example, as it forces to think about
+- Mention the iris example, pitch it as historical, but also as a
+  botanical and agriculture problem.
+  The benefit of this example is that it forces to think about
   measurement, but also because it has one class that is easy to separate
   only one feature
     - Aurelie: real irises for the video?
 - The "adult" dataset
     - Maybe looking at it with excel, to be in an environment familiar to
       people
+    - Mention the importance of data visualization: intuitions about the
+      data can be very helpful
 
 Descriptive vs predictive analysis
 - Generalization (Out of sample properties)
@@ -27,6 +31,8 @@ Descriptive vs predictive analysis
 Learning from data vs expertly engineered decision rules
 - One the iris example, show that cutting on one specific feature
   separates well one class
+- How do we automate this? How do we achieve this on more complex data
+  such as the census dataset?
 
 Generalization vs memorization: the need for a train / test split
 - The nearest neighbors example to illustrate this
