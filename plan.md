@@ -108,6 +108,9 @@ Use the column transformer to build pipeline with heterogeneous dtype
 
 Model fitting and performance evaluation with cross-validation
 
+- Gael thinks that we could use a video here for cross-validation
+  (in particular, the "plot_cv_indices" in the notebook gets a bit in the
+  way of being accessible and didactic
 
 ## Notebook module #3: basic parameter tuning and final test score evaluation
 
@@ -159,4 +162,9 @@ Show catastrophic example where feature selection is done on the whole dataset r
 Failure Mode : cardinality bias of overfitting random forest feature importances
 
 ## Looking at the decision function with partial dependence plots
+
+Gael thinks that explaining the difference between conditional and
+marginal interpretation is important.
+
 Stability of hyperparameter during cross-validation
+
