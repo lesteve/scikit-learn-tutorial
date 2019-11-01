@@ -2,7 +2,7 @@ class: center, middle
 
 # MOOC Machine learning with scikit-learn
 
-<img src="../scikit-learn-logo.svg">
+<img src="../scikit-learn-logo.svg" style="width: 90%;">
 
 ---
 
@@ -34,9 +34,16 @@ class: center, middle
 
 What type of iris is this? There are three classic 
 
-* one
-* two
-* three
+* Setosa
+* Versicolor
+* Virginica
 
+---
+
+# Is this person rich?
+
+<img src="people.svg" style="float: right; width: 200px">
+
+--
 
 
