@@ -1,3 +1,5 @@
+# Compilation is done via remarker and htmlark, both pip instalable
+
 all: slides.html
 
 slides.html: slides.md custom.css
