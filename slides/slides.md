@@ -1,8 +1,8 @@
+class: center, middle
 
 # MOOC Machine learning with scikit-learn
 
 <img src="../scikit-learn-logo.svg">
-
 
 ---
 
@@ -14,6 +14,7 @@ Machine learning deals with building predictive models
 
 
 ---
+class: center, middle
 
 # Why and when? Some examples
 
