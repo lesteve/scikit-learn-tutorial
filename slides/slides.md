@@ -8,10 +8,7 @@
 
 # What is machine learning?
 
-
----
-
-# What is machine learning?
+--
 
 Machine learning deals with building predictive models
 
