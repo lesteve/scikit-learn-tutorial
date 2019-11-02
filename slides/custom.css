@@ -25,3 +25,42 @@ body.remark-container {
     background: linear-gradient(160deg, rgb(150, 215, 249) 0%, rgb(255, 243, 211) 100%);
 }
 
+/* Enlarge the presenter's note display */
+
+.remark-notes-area {
+    left: 50%;
+}
+
+.remark-container.remark-presenter-mode .remark-slides-area, 
+.remark-container.remark-presenter-mode .remark-preview-area {
+    left: 1%;
+}
+
+.remark-notes-area .remark-bottom-area .remark-notes-current-area {
+    height: 80%;
+}
+
+.remark-notes-area .remark-bottom-area {
+  top: 50px;
+}
+
+/* Custom css for layout in slides */
+
+.larger {
+    transform: scale(1.2);
+    transform-origin: left;
+}
+
+.pull-left {
+    float: left;
+    width: 47%;
+}
+
+.pull-right {
+    float: right;
+    width: 47%;
+}
+
+.pull-right ~ p {
+    clear: both;
+}

@@ -4,23 +4,55 @@ class: center, middle
 
 <img src="../scikit-learn-logo.svg" style="width: 90%;">
 
+???
+
+Hi, welcome to the MOOC on machine learning with scikit-learn
+
 ---
 
 # What is machine learning?
+
+???
+
+In this first course, we will discover what is machine learning and its
+general underlying concepts.
 
 --
 
 Machine learning deals with building predictive models
 
+???
+
+In a nutshell, machine learning is about building predictive models. I
+will explain what we mean by that.
+
 
 ---
 class: center, middle
 
-# Why and when? Some examples
+# Why and when?
+
+Some examples of machine learning
+
+???
+
+Why and when would we use machine learning?
+
+Let me start with a couple examples.
 
 ---
 
 # Which iris is that?
+
+<img src="iris-silhouette.svg" style="position: absolute; right: 1ex; top: 1ex; width: 250px">
+
+
+???
+
+*Pick up a iris*,
+
+Consider flowers, for instance. I am not very good at recognizing them.
+This is an iris. But what type?
 
 --
 
@@ -30,19 +62,48 @@ class: center, middle
 
 ???
 
-*Pick up a iris*,
+There are three classic types of iris,
 
-What type of iris is this? There are three classic 
+> Setosa - Versicolor - Virginica
 
-* Setosa
-* Versicolor
-* Virginica
+Maybe I can use machine learning to build mathematical rules to set them
+appart?
+
+For this, I will describe the irises with numbers. I can measure the
+dimensions of there sepal and petal. *Pick up a ruler, and pretend to
+measure*
+
+--
+
+&nbsp;  
+
+.larger[
+
+| Sepal length | Sepal width | Petal length | Petal width | Iris type  |
+| ------------ | ----------- | ------------ | ----------- | ---------- |
+| 6cm          | 3.4cm       | 4.5cm        | 1.6cm       | versicolor |
+| 5.7cm        | 3.8cm       | 1.7cm        | 0.3cm       | setosa     |
+| 6.5cm        | 3.2cm       | 5.1cm        | 2cm         | virginica  |
+| 5cm          | 3.cm        | 1.6cm        | 0.2cm       | setosa     |
+
+]
+
+???
+
+Now I have a set of numbers describing irises. Can I build decision rules
+from them? Maybe. See, for instance, it seems that setosa irises have a
+very small petal.
 
 ---
 
 # Is this person rich?
 
 <img src="people.svg" style="position: absolute; right: 1ex; top: 1ex; width: 200px">
+
+???
+
+Let us consider a problem closer to a business case; that of estimating
+the income of someone.
 
 --
 
@@ -55,6 +116,12 @@ US Census data:
 | 28  | Local-gov | Assoc-acdm   | Married-civ-spouse | Protective-serv    | Husband      | White | Male | 0            | 40             | United-States   | >50K  |
 | 44  | Private   | Some-college | Married-civ-spouse | Machine-op-inspct  | Husband      | Black | Male | 7688         | 40             | United-States   | >50K  |
 
---
+???
 
+For this, we can use data from the US census.
+
+As you see, it gives is fairly diverse information about individuals, as
+well as whether they earn more or less than 50 thousand dollars a year.
+We can use machine learning to build rules that will predict this income
+information from the rest of the demographic information.
 
