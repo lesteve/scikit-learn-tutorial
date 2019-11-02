@@ -125,3 +125,52 @@ well as whether they earn more or less than 50 thousand dollars a year.
 We can use machine learning to build rules that will predict this income
 information from the rest of the demographic information.
 
+You can also see that, even in a simple example like this, having
+intuition about the information available on many individuals can be a
+bit challenging. Data visualization will come in handy.
+
+---
+# Engineering rules: data versus experts
+
+--
+
+
+<table>
+<thead><tr>
+	<th>Sepal length</th>
+	<th>Sepal width</th>
+	<th>Petal length</th>
+	<th>Petal width</th>
+</tr></thead>
+<tbody><tr>
+    <td>
+    <img src="../figures/iris_sepal_length_cm_hist.svg" style="width: 100%;">
+    </td>
+    <td>
+    <img src="../figures/iris_sepal_width_cm_hist.svg" style="width: 100%;">
+    </td>
+    <td>
+    <img src="../figures/iris_petal_length_cm_hist.svg" style="width: 100%;">
+    </td>
+    <td>
+    <img src="../figures/iris_petal_width_cm_hist.svg" style="width: 100%;">
+    </td>
+    </tr></tbody>
+</table>
+
+---
+class: center, middle
+
+# Predictive analysis
+
+Beyond classic statistical tools
+
+???
+
+To build predictive models, we are going to rely on statistical
+properties of the data. However, there questions and the tools that we
+will use differ a bit from those traditionnally used in statistics.
+
+---
+# Generalization
+
