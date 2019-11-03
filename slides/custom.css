@@ -7,8 +7,30 @@ div.remark-slide {
     font-family: "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
 }
 
-div.remark-slide p, div.remark-slide li {
+div.remark-slide-content.middle {
+    padding-top: 0em;
+    padding-bottom 3em;
+}
+
+div.remark-slide-content.center {
+    padding-left: 4em;
+    padding-right 4em;
+}
+
+div.remark-slide p, div.remark-slide li, .remark-slide-content {
     font-size: 35px;
+}
+
+div.remark-slide-content {
+    padding-left: 2.5em;
+}
+
+div.remark-slide-content:not(.center) h1 {
+    margin-right: -2em
+}
+
+div.remark-slide .small {
+    font-size: 20px;
 }
 
 thead {

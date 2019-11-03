@@ -75,10 +75,6 @@ measure*
 
 --
 
-&nbsp;  
-
-.larger[
-
 | Sepal length | Sepal width | Petal length | Petal width | Iris type  |
 | ------------ | ----------- | ------------ | ----------- | ---------- |
 | 6cm          | 3.4cm       | 4.5cm        | 1.6cm       | versicolor |
@@ -86,7 +82,6 @@ measure*
 | 6.5cm        | 3.2cm       | 5.1cm        | 2cm         | virginica  |
 | 5cm          | 3.cm        | 1.6cm        | 0.2cm       | setosa     |
 
-]
 
 ???
 
@@ -100,6 +95,7 @@ very small petal.
 
 <img src="people.svg" style="position: absolute; right: 1ex; top: 1ex; width: 200px">
 
+
 ???
 
 Let us consider a problem closer to a business case; that of estimating
@@ -109,12 +105,16 @@ the income of someone.
 
 US Census data:
 
+.small[
+
 | age | workclass | education    | marital-status     | occupation         | relationship | race  | sex  | capital-gain | hours-per-week | native-country | class |
 | --- | --------- | ------------ | ------------------ | ------------------ | ------------ | ----- | ---- | ------------ | -------------- | -------------- | ----- |
 | 25  | Private   | 11th         | Never-married      | Machine-op-inspct  | Own-child    | Black | Male | 0            | 40             | United-States  | <=50K |
 | 38  | Private   | HS-grad      | Married-civ-spouse | Farming-fishing    | Husband     | White  | Male | 0            | 50             | United-States   | <=50K |
 | 28  | Local-gov | Assoc-acdm   | Married-civ-spouse | Protective-serv    | Husband      | White | Male | 0            | 40             | United-States   | >50K  |
 | 44  | Private   | Some-college | Married-civ-spouse | Machine-op-inspct  | Husband      | Black | Male | 7688         | 40             | United-States   | >50K  |
+
+]
 
 ???
 
@@ -132,8 +132,15 @@ bit challenging. Data visualization will come in handy.
 ---
 # Engineering rules: data versus experts
 
---
+Expert knowledge: setosa irises have small petals
 
+???
+
+So, machine learning is about engineering decision rules from the data.
+But experts can also engineer decision rules from their knowledge of the
+problem. For instance, experts know that setosa irises have small petals.
+
+--
 
 <table>
 <thead><tr>
@@ -157,6 +164,19 @@ bit challenging. Data visualization will come in handy.
     </td>
     </tr></tbody>
 </table>
+<img src="../figures/legend_irises.svg" style='float: left;'>
+
+This rule can be infered from the data
+
+???
+
+This rule can also be infered by looking at the data. If we look at the
+distribution of the sepal and petal measurements for the different iris
+specis, we can see that petal length and width single well out setosa.
+
+The benefit of machine-learning is that it automates the creation of
+these rules from the data, including their details, such as where exactly
+to set the threshold.
 
 ---
 class: center, middle
