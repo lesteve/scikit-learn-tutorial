@@ -67,7 +67,7 @@ There are three classic types of iris,
 > Setosa - Versicolor - Virginica
 
 Maybe I can use machine learning to build mathematical rules to set them
-appart?
+apart?
 
 For this, I will describe the irises with numbers. I can measure the
 dimensions of there sepal and petal. *Pick up a ruler, and pretend to
@@ -166,13 +166,13 @@ problem. For instance, experts know that setosa irises have small petals.
 </table>
 <img src="../figures/legend_irises.svg" style='float: left;'>
 
-This rule can be infered from the data
+This rule can be inferred from the data
 
 ???
 
-This rule can also be infered by looking at the data. If we look at the
+This rule can also be inferred by looking at the data. If we look at the
 distribution of the sepal and petal measurements for the different iris
-specis, we can see that petal length and width single well out setosa.
+species, we can see that petal length and width single well out setosa.
 
 The benefit of machine-learning is that it automates the creation of
 these rules from the data, including their details, such as where exactly
@@ -189,8 +189,52 @@ Beyond classic statistical tools
 
 To build predictive models, we are going to rely on statistical
 properties of the data. However, there questions and the tools that we
-will use differ a bit from those traditionnally used in statistics.
+will use differ a bit from those traditionally used in statistics.
 
 ---
 # Generalization
+
+Concluding on new instances
+
+???
+
+In machine learning, we want to conclude on new instances. In the 
+example on the census, I want to be able to predict the income of new
+individuals, which a combination of jobs and demographics that I have
+never seen.
+
+--
+
+Many sources of variability:
+
+.columns[
+* age
+* workclass
+* education 
+* marital-status
+* occupation
+* relationship
+* race
+* sex
+* capital-gain
+* hours-per-week 
+* native-country
+]
+
+*+* Noise: unexplainable variance
+
+???
+
+The challenge is that there are many ways an individual can
+vary, even within the limited description given by our data.
+
+--
+
+
+???
+
+An additional difficulty is the noise in the data. By noise, we mean the
+aspects that cannot by explained by solely from the data. For instance,
+an individual's income may have been influenced by the mood of his manager 
+during his annual review.
 

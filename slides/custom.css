@@ -86,3 +86,26 @@ body.remark-container {
 .pull-right ~ p {
     clear: both;
 }
+
+/*.columms ul li {
+    display: inline-block;
+    width: 45%;
+}*/
+
+.columns ul li {
+    float: left;
+    min-width: 10ex;
+    width: 28%;
+    margin-right: 1.25em;
+    vertical-align: text-top;
+}
+
+.columns ul:after {
+     visibility: hidden;
+     display: block;
+     font-size: 0;
+     content: " ";
+     clear: both;
+     height: 0;
+}
+
