@@ -44,7 +44,7 @@ Let me start with a couple examples.
 
 # Which iris is that?
 
-<img src="iris-silhouette.svg" style="position: absolute; right: 1ex; top: 1ex; width: 250px">
+<img src="iris-silhouette.svg" style="position: absolute; right: 1ex; top: 1ex; width: 150px">
 
 
 ???
@@ -134,6 +134,9 @@ bit challenging. Data visualization will come in handy.
 
 Expert knowledge: setosa irises have small petals
 
+<img src="iris-silhouette_gray.svg" style="position: absolute; right: 1ex; top: 7ex; width: 150px;">
+
+
 ???
 
 So, machine learning is about engineering decision rules from the data.
@@ -194,6 +197,8 @@ will use differ a bit from those traditionally used in statistics.
 ---
 # Generalization
 
+<img src="people.svg" style="position: absolute; right: 1ex; top: 1ex; width: 200px">
+
 Concluding on new instances
 
 ???
@@ -221,14 +226,14 @@ Many sources of variability:
 * native-country
 ]
 
-*+* Noise: unexplainable variance
-
 ???
 
 The challenge is that there are many ways an individual can
 vary, even within the limited description given by our data.
 
 --
+
+*+* Noise: unexplainable variance
 
 
 ???
