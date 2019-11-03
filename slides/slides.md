@@ -105,7 +105,7 @@ the income of someone.
 
 US Census data:
 
-.small[
+.very-small[
 
 | age | workclass | education    | marital-status     | occupation         | relationship | race  | sex  | capital-gain | hours-per-week | native-country | class |
 | --- | --------- | ------------ | ------------------ | ------------------ | ------------ | ----- | ---- | ------------ | -------------- | -------------- | ----- |
@@ -195,7 +195,7 @@ properties of the data. However, there questions and the tools that we
 will use differ a bit from those traditionally used in statistics.
 
 ---
-# Generalization
+# Generalizing
 
 <img src="people.svg" style="position: absolute; right: 1ex; top: 1ex; width: 200px">
 
@@ -242,4 +242,91 @@ An additional difficulty is the noise in the data. By noise, we mean the
 aspects that cannot by explained by solely from the data. For instance,
 an individual's income may have been influenced by the mood of his manager 
 during his annual review.
+
+---
+# Memorizing
+
+<img src="people.svg" style="position: absolute; right: 1ex; top: 1ex; width: 200px">
+
+
+* store all known individual .small[(the census)]
+* given a new individual, predict the income of its closest match in our database
+
+???
+
+One possibility for prediction is to memorize the whole available data.
+
+Given the problem of predicting income, we can store all known
+individuals, the census. Then, give a new individual, we predict the
+income of its closest match in our database.
+
+This strategy is known is machine learning as a "nearest neighbor"
+predictor.
+
+--
+
+Trying out this strategy on the data we have, the census, *what error
+rate do we expect?*
+
+???
+
+If we try this strategy on the data we have, the census, what error rate
+do we expect?
+
+--
+
+> **0 errors**
+
+
+???
+
+Every individual for which we are asking a prediction is in our database.
+Thus, its closest match will be itself, and as a consequence, we will
+have zero prediction error.
+
+--
+
+.red[Yet, we will make errors on **new** data]
+
+???
+
+However, if we try our strategy on unseen data, it will not be able to
+find exact match. Hence, it is likely to make some errors.
+
+---
+
+.center.large.reversed[**Generalizing &nbsp;≠&nbsp; Memorizing** &nbsp;]
+
+???
+
+What we are seeing here is that generalizing is very different from
+memorizing. This is a fundamental challenge of machine learning.
+
+--
+
+.center["test" data &nbsp;≠&nbsp; "train" data]
+
+.pull-left[Data on which the predictive model is applied]
+
+.pull-right[Data used to learn the predictive model]
+
+&nbsp;   
+
+&nbsp;   
+
+
+* Different sampling of noise
+* Unobserved combination of features
+
+???
+
+The reason is that the data on which we apply the predictive model, known
+as the test data, is different from the data used to build the predictive
+model, known as the train data.
+
+They are different because there might be different noise, but also
+because there might be individuals with new configuration of features
+that we have not observed: different combinations of occupation, age, and
+marital status.
+
 
