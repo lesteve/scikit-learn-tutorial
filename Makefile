@@ -2,12 +2,15 @@ PYTHON_SCRIPTS_DIR = python_scripts
 NOTEBOOKS_DIR = notebooks
 RENDERED_NOTEBOOKS_DIR = rendered_notebooks
 JUPYTER_KERNEL := python3
-MINIMAL_NOTEBOOK_FILES = $(shell ls $(PYTHON_SCRIPTS_DIR)/*.py | perl -pe "s@$(PYTHON_SCRIPTS_DIR)@$(NOTEBOOKS_DIR)@" | perl -pe "s@\.py@.ipynb@")
-MINIMAL_RENDERED_NOTEBOOK_FILES = $(shell ls $(PYTHON_SCRIPTS_DIR)/*.py | perl -pe "s@$(PYTHON_SCRIPTS_DIR)@$(RENDERED_NOTEBOOKS_DIR)@" | perl -pe "s@\.py@.ipynb@")
+MINIMAL_NOTEBOOK_FILES = $(shell ls $(PYTHON_SCRIPTS_DIR)/*.py \
+	| perl -pe "s@$(PYTHON_SCRIPTS_DIR)@$(NOTEBOOKS_DIR)@" | perl -pe "s@\.py@.ipynb@")
+MINIMAL_RENDERED_NOTEBOOK_FILES = $(shell ls $(PYTHON_SCRIPTS_DIR)/*.py \
+	| perl -pe "s@$(PYTHON_SCRIPTS_DIR)@$(RENDERED_NOTEBOOKS_DIR)@" | perl -pe "s@\.py@.ipynb@")
 
 all: $(RENDERED_NOTEBOOKS_DIR)
 
-.PHONY: $(NOTEBOOKS_DIR) $(RENDERED_NOTEBOOKS_DIR) sanity_check_$(PYTHON_SCRIPTS_DIR) sanity_check_$(NOTEBOOKS_DIR) sanity_check_$(RENDERED_NOTEBOOKS_DIR) all
+.PHONY: $(NOTEBOOKS_DIR) $(RENDERED_NOTEBOOKS_DIR) sanity_check_$(PYTHON_SCRIPTS_DIR) \
+	sanity_check_$(NOTEBOOKS_DIR) sanity_check_$(RENDERED_NOTEBOOKS_DIR) all
 
 $(NOTEBOOKS_DIR): sanity_check_$(PYTHON_SCRIPTS_DIR) $(MINIMAL_NOTEBOOK_FILES) sanity_check_$(NOTEBOOKS_DIR)
 
@@ -31,3 +34,6 @@ sanity_check_$(NOTEBOOKS_DIR):
 
 sanity_check_$(RENDERED_NOTEBOOKS_DIR):
 	python build_scripts/sanity-check.py $(NOTEBOOKS_DIR) $(RENDERED_NOTEBOOKS_DIR)
+
+test_python_scripts/%.py:
+	grep "python_scripts//py:percent" $(shell echo $@ | perl -pe 's@test_@@') || jupytext --set-formats $(PYTHON_SCRIPTS_DIR)//py:percent,$(NOTEBOOKS_DIR)//ipynb $(shell echo $@ | perl -pe 's@test_@@')
