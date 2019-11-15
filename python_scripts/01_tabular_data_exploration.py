@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.2'
-#       jupytext_version: 1.2.3
+#       jupytext_version: 1.2.4
 # ---
 
 # %% [markdown]
@@ -305,7 +305,7 @@ plot_tree_decision_function(tree, X, y, ax=ax)
 # * inspected the data with `pandas`, `seaborn` and `pandas_profiling`. Data inspection
 #   can allow you to decide whether using machine learning is appropriate for
 #   your data and to highlight potential peculiarities in your data
-# 
+#
 # Key ideas discussed:
 # * if your target variable is imbalanced (e.g., you have more samples from one
 #   target category than another), you may need special techniques for machine
