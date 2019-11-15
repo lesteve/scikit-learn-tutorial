@@ -279,7 +279,7 @@ print(f"Time elapsed to train LogisticRegressionCV: "
 # ## Combining evaluation and hyper-parameters search
 #
 # Cross-validation was used for searching for the best model parameters. We
-# previously we evaluated model performance through cross-validation as well. If we
+# previously evaluated model performance through cross-validation as well. If we
 # would like to combine both aspects, we need to perform a "nested"
 # cross-validation. The "outer" cross-validation is applied to assess the
 # model while the "inner" cross-validation sets the hyper-parameters of the
