@@ -61,33 +61,32 @@ df_train, df_test, target_train, target_test = train_test_split(
 # %%
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OrdinalEncoder
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.preprocessing import StandardScaler
 
-binary_encoding_columns = ['sex']
-one_hot_encoding_columns = [
+ordinal_encoding_columns = [
     'workclass', 'education', 'marital-status', 'occupation',
-    'relationship', 'race', 'native-country']
-scaling_columns = [
-    'age', 'capital-gain', 'capital-loss', 'hours-per-week',
-    'education-num']
+    'relationship', 'race', 'native-country', 'sex']
 
-preprocessor = ColumnTransformer([
-    ('binary-encoder', OrdinalEncoder(), binary_encoding_columns),
-    ('one-hot-encoder', OneHotEncoder(handle_unknown='ignore'),
-     one_hot_encoding_columns),
-    ('standard-scaler', StandardScaler(), scaling_columns)])
+categories = [
+    data[column].unique()
+    for column in data[ordinal_encoding_columns]]
+
+preprocessor = ColumnTransformer(
+    [('ordinal-encoder',
+      OrdinalEncoder(categories=categories), ordinal_encoding_columns)],
+     remainder='passthrough', sparse_threshold=0)
 
 # %% [markdown]
-# Finally, we use a linear classifier (i.e. logistic regression) to predict
-# whether or not a person earn more than 50,000 dollars a year.
+# Finally, we use a tree-based classifier (i.e. histogram gradient-boosting) to
+# predict whether or not a person earn more than 50,000 dollars a year.
 
 # %%
-from sklearn.linear_model import LogisticRegression
+# for the moment this line is required to import HistGradientBoostingClassifier
+from sklearn.experimental import enable_hist_gradient_boosting
+from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.pipeline import make_pipeline
 
 model = make_pipeline(
-    preprocessor, LogisticRegression(max_iter=1000, solver='lbfgs'))
+    preprocessor, HistGradientBoostingClassifier(random_state=42))
 model.fit(df_train, target_train)
 print(f"The accuracy score using a {model.__class__.__name__} is "
       f"{model.score(df_test, target_test):.2f}")
@@ -95,119 +94,130 @@ print(f"The accuracy score using a {model.__class__.__name__} is "
 # %% [markdown]
 # ## The issue of finding the best model parameters
 #
-# In the previous example, we created a `LogisticRegression` classifier using
-# the default parameters by omitting setting explicitly these parameters.
+# In the previous example, we created an histogram gradient-boosting classifier
+# using the default parameters by omitting setting explicitely these
+# parameters.
 #
-# For this classifier, the parameter `C` governes the penalty; in other
-# words, how much our model should "trust" (or fit) the training data.
+# However, there is no reasons that this set of parameters are optimal for our
+# dataset. For instance, fine-tuning the histogram gradient-boosting can be
+# achieved by finding the best combination of the following parameters: (i)
+# `learning_rate`, (ii) `min_samples_leaf`, and (iii) `max_leaf_nodes`.
+# Nevertheless, finding this combination manually will be tedious. Indeed,
+# there are relationship between these parameters which are difficult to find
+# manually: increasing the depth of trees (increasing `max_samples_leaf`)
+# should be associated with a lower learning-rate.
 #
-# Therefore, the default value of `C` is never certified to give the best
-# performing model.
-#
-# We can make a quick experiment by changing the value of `C` and see the
-# impact of this parameter on the model performance.
-
-# %%
-C = 1
-model = make_pipeline(
-    preprocessor,
-    LogisticRegression(C=C, max_iter=1000, solver='lbfgs'))
-model.fit(df_train, target_train)
-print(f"The accuracy score using a {model.__class__.__name__} is "
-      f"{model.score(df_test, target_test):.2f} with C={C}")
-
-# %%
-C = 1e-5
-model = make_pipeline(
-    preprocessor,
-    LogisticRegression(C=C, max_iter=1000, solver='lbfgs'))
-model.fit(df_train, target_train)
-print(f"The accuracy score using a {model.__class__.__name__} is "
-      f"{model.score(df_test, target_test):.2f} with C={C}")
-
+# Scikit-learn provides tools to explore and evaluate the parameters
+# space.
 # %% [markdown]
 # ## Finding the best model hyper-parameters via exhaustive parameters search
 #
-# We see that the parameter `C` as a significative impact on the model
-# performance. This parameter should be tuned to get the best cross-validation
-# score, so as to avoid over-fitting problems.
+# Our goal is to find the best combination of the parameters stated above.
 #
-# In short, we will set the parameter, train our model on some data, and
-# evaluate the model performance on some left out data. Ideally, we will select
-# the parameter leading to the optimal performance on the testing set.
-# Scikit-learn provides a `GridSearchCV` estimator which will handle the
-# cross-validation and hyper-parameter search for us.
-
-# %%
-from sklearn.model_selection import GridSearchCV
-
-model = make_pipeline(
-    preprocessor, LogisticRegression(max_iter=1000, solver='lbfgs'))
+# In short, we will set these parameters with some defined values, train our
+# model on some data, and evaluate the model performance on some left out data.
+# Ideally, we will select the parameters leading to the optimal performance on
+# the testing set. Scikit-learn provides a `GridSearchCV` estimator which will
+# handle the cross-validation and hyper-parameter search for us.
 
 # %% [markdown]
-# We will see that we need to provide the name of the parameter to be set.
-# Thus, we can use the method `get_params()` to have the list of the parameters
-# of the model which can set during the grid-search.
+# The first step is to find the name of the parameters to be set. We use the
+# method `get_params()` to get this information. For instance, for a single
+# model like the `HistGradientBoostingClassifier`, we can get the list such as:
 
-# %%
 print(
-    "The hyper-parameters are for a logistic regression model are:")
-for param_name in LogisticRegression().get_params().keys():
+    "The hyper-parameters are for a histogram GBDT model are:")
+for param_name in HistGradientBoostingClassifier().get_params().keys():
     print(param_name)
 
-# %%
+# %% [markdown]
+# When the model of interest is a `Pipeline`, a serie of transformers and a
+# predictor, the name of the estimator will be added at the front of the
+# parameter name with a double underscore in-between
+# (e.g. `estimator__parameters`).
 print("The hyper-parameters are for the full-pipeline are:")
 for param_name in model.get_params().keys():
     print(param_name)
 
 # %% [markdown]
-# The parameter `'logisticregression__C'` is the parameter for which we would
-# like different values. Let see how to use the `GridSearchCV` estimator for
-# doing such search.
+# The parameters that we want to set are:
+# - `'histgradientboostingclassifier__learning_rate'`;
+# - `'histgradientboostingclassifier__min_samples_leaf'`;
+# - `'histgradientboostingclassifier__max_leaf_nodes'`.
+# Let see how to use the `GridSearchCV` estimator for doing such search.
+# Since the grid-search will be costly, we will only explore the combination
+# learning-rate and the maximum number of nodes.
 
 # %%
-import time
 import numpy as np
+from sklearn.model_selection import GridSearchCV
 
-param_grid = {'logisticregression__C': (0.1, 1.0, 10.0)}
+param_grid = {
+    'histgradientboostingclassifier__learning_rate': (0.001, 0.1),
+    'histgradientboostingclassifier__max_leaf_nodes': (5, 63),
+}
 model_grid_search = GridSearchCV(model, param_grid=param_grid,
                                  n_jobs=4, cv=5)
-start = time.time()
 model_grid_search.fit(df_train, target_train)
-elapsed_time = time.time() - start
 print(
     f"The accuracy score using a {model_grid_search.__class__.__name__} is "
-    f"{model_grid_search.score(df_test, target_test):.2f} in "
-    f"{elapsed_time:.3f} seconds")
+    f"{model_grid_search.score(df_test, target_test):.2f}")
 
 # %% [markdown]
 # The `GridSearchCV` estimator takes a `param_grid` parameter which defines
-# all possible parameters combination. Once the grid-search fitted, it can be
-# used as any other predictor by calling `predict` and `predict_proba`.
-# Internally, it will use the model with the best parameters found during
-# `fit`. You can know about these parameters by looking at the `best_params_`
+# all hyper-parameters and their associated values. The grid-search will be in
+# charge of creating all possible combinations and test them.
+#
+# The number of combinations will be equal to the product of the number of
+# values to explore for each parameter (e.g. in our example 2x2 combinations).
+# Thus, adding a new parameters with associated values to explore become
+# rapidly computationally expensive.
+#
+# Once the grid-search fitted, it can be used as any other predictor by calling
+# `predict` and `predict_proba`. Internally, it will use the model with the
+# best parameters found during `fit`.
+
+# Get predictions for the 5 first samples using the estimator with the best
+# parameters.
+model_grid_search.predict(df_test.iloc[0:5])
+
+# %% [markdown]
+# You can know about these parameters by looking at the `best_params_`
 # attribute.
 
-# %%
 print(
     f"The best set of parameters is: {model_grid_search.best_params_}"
 )
 
 # %% [markdown]
 # With the `GridSearchCV` estimator, the parameters need to be specified
-# explicitely. Instead, one could randomly generate (following a specific
-# distribution) the parameter candidates. The `RandomSearchCV` allows for such
-# stochastic search. It is used similarly to the `GridSearchCV` but the
-# sampling distributions need to be specified instead of the parameter values.
+# explicitely. We mentioned that exploring a large number of values for
+# different parameters will be quickly untractable.
+#
+# Instead, we can randomly generate the parameter candidates. The
+# `RandomSearchCV` allows for such stochastic search. It is used similarly to
+# the `GridSearchCV` but the sampling distributions need to be specified
+# instead of the parameter values.
 
 # %%
-from scipy.stats import uniform
+from scipy.stats import reciprocal
 from sklearn.model_selection import RandomizedSearchCV
 
+class reciprocal_int:
+    def __init__(self, a, b):
+        self._distribution = reciprocal(a, b)
+    def rvs(self, *args, **kwargs):
+        return self._distribution.rvs(*args, **kwargs).astype(int)
+
+
 param_distributions = {
-    'logisticregression__C': uniform(loc=50, scale=100)}
+    'histgradientboostingclassifier__max_iter': reciprocal_int(10, 100),
+    'histgradientboostingclassifier__learning_rate': reciprocal(0.001, 0.1),
+    'histgradientboostingclassifier__max_leaf_nodes': reciprocal_int(5, 63),
+    'histgradientboostingclassifier__min_samples_leaf': reciprocal_int(3, 40),
+}
 model_grid_search = RandomizedSearchCV(
-    model, param_distributions=param_distributions, n_iter=3,
+    model, param_distributions=param_distributions, n_iter=10,
     n_jobs=4, cv=5)
 model_grid_search.fit(df_train, target_train)
 print(
