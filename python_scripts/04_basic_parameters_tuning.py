@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.2'
-#       jupytext_version: 1.2.3
+#       jupytext_version: 1.2.4
 #   kernelspec:
 #     display_name: Python 3
 #     language: python
@@ -16,16 +16,16 @@
 # %% [markdown]
 # # Introduction to scikit-learn: basic model hyper-parameters tuning
 #
-# The process to learn a predictive model is driven by a set of internal
+# The process of learning a predictive model is driven by a set of internal
 # parameters and a set of training data. These internal parameters are called
 # hyper-parameters and are specific for each family of models. In addition,
-# a set of parameters are optimal for a specific dataset and thus they need
+# a specific set of parameters are optimal for a specific dataset and thus they need
 # to be optimized.
 #
 # This notebook shows:
 # * the influence of changing model parameters;
 # * how to tune these hyper-parameters;
-# * how to evaluate the model performance together with hyper-parameters
+# * how to evaluate the model performance together with hyper-parameter
 #   tuning.
 
 # %%
@@ -77,7 +77,7 @@ preprocessor = ColumnTransformer(
 
 # %% [markdown]
 # Finally, we use a tree-based classifier (i.e. histogram gradient-boosting) to
-# predict whether or not a person earn more than 50,000 dollars a year.
+# predict whether or not a person earns more than 50,000 dollars a year.
 
 # %%
 # for the moment this line is required to import HistGradientBoostingClassifier
@@ -95,8 +95,7 @@ print(f"The accuracy score using a {model.__class__.__name__} is "
 # ## The issue of finding the best model parameters
 #
 # In the previous example, we created an histogram gradient-boosting classifier
-# using the default parameters by omitting setting explicitely these
-# parameters.
+# using the default parameters by omitting to explicitely set these parameters.
 #
 # However, there is no reasons that this set of parameters are optimal for our
 # dataset. For instance, fine-tuning the histogram gradient-boosting can be
@@ -230,9 +229,9 @@ print(
 # %% [markdown]
 # ## Notes on search efficiency
 #
-# Be aware that sometimes, scikit-learn provides some `EstimatorCV` classes
-# which will perform internally the cross-validation in such way that it will
-# more computationally efficient. We can give the example of the
+# Be aware that sometimes, scikit-learn provides `EstimatorCV` classes
+# which will internally perform the cross-validation in such way that it will
+# be more computationally efficient. We can give the example of the
 # `LogisticRegressionCV` which can be used to find the best `C` in a more
 # efficient way than what we previously did with the `GridSearchCV`.
 
@@ -253,7 +252,7 @@ print(f"Time elapsed to train LogisticRegressionCV: "
       f"{elapsed_time:.3f} seconds")
 
 # %% [markdown]
-# The `fit` time for the `CV` version of `LogisticRegression` give a speed-up
+# The `fit` time for the `CV` version of `LogisticRegression` gives a speed-up
 # x2. This speed-up is provided by re-using the values of coefficients to
 # warm-start the estimator for the different `C` values.
 
@@ -270,7 +269,7 @@ print(f"Time elapsed to train LogisticRegressionCV: "
 #         an exponential distribution to sample the possible values.
 #       * `l2_regularization` with values ranging from 0 to 0.5. You can use
 #         a uniform distribution.
-#       * `max_lead_nodes` with values ranging from 5 to 30. The values should
+#       * `max_leaf_nodes` with values ranging from 5 to 30. The values should
 #         be integer following a uniform distribution.
 #       * `min_samples_leaf` with values ranging from 5 to 30. The values
 #         should be integer following a uniform distribution.
@@ -288,13 +287,13 @@ print(f"Time elapsed to train LogisticRegressionCV: "
 # %% [markdown]
 # ## Combining evaluation and hyper-parameters search
 #
-# Cross-validation was used for searching the best model parameters. We
-# previously evaluate model performance through cross-validation as well. If we
+# Cross-validation was used for searching for the best model parameters. We
+# previously evaluated model performance through cross-validation as well. If we
 # would like to combine both aspects, we need to perform a "nested"
 # cross-validation. The "outer" cross-validation is applied to assess the
-# model while the "inner" cross-validation set the hyper-parameters of the
+# model while the "inner" cross-validation sets the hyper-parameters of the
 # model on the data set provided by the "outer" cross-validation. In practice,
-# it is equivalent of including, `GridSearchCV`, `RandomSearchCV`, or any
+# it is equivalent to including, `GridSearchCV`, `RandomSearchCV`, or any
 # `EstimatorCV` in a `cross_val_score` or `cross_validate` function call.
 
 # %%
