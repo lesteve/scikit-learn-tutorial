@@ -62,18 +62,18 @@ df_train, df_test, target_train, target_test = train_test_split(
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OrdinalEncoder
 
-ordinal_encoding_columns = [
+categorical_columns = [
     'workclass', 'education', 'marital-status', 'occupation',
     'relationship', 'race', 'native-country', 'sex']
 
-categories = [
-    data[column].unique()
-    for column in data[ordinal_encoding_columns]]
+categories = [data[column].unique()
+              for column in data[categorical_columns]]
+
+categorical_preprocessor = OrdinalEncoder(categories=categories)
 
 preprocessor = ColumnTransformer(
-    [('ordinal-encoder',
-      OrdinalEncoder(categories=categories), ordinal_encoding_columns)],
-     remainder='passthrough', sparse_threshold=0)
+    [('cat-preprocessor', categorical_preprocessor, categorical_columns)],
+    remainder='passthrough', sparse_threshold=0)
 
 # %% [markdown]
 # Finally, we use a tree-based classifier (i.e. histogram gradient-boosting) to
@@ -130,10 +130,10 @@ for param_name in HistGradientBoostingClassifier().get_params().keys():
     print(param_name)
 
 # %% [markdown]
-# When the model of interest is a `Pipeline`, a serie of transformers and a
-# predictor, the name of the estimator will be added at the front of the
-# parameter name with a double underscore in-between
-# (e.g. `estimator__parameters`).
+# When the model of interest is a `Pipeline`, i.e. a serie of transformers and
+# a predictor, the name of the estimator will be added at the front of the
+# parameter name with a double underscore ("dunder") in-between (e.g.
+# `estimator__parameters`).
 print("The hyper-parameters are for the full-pipeline are:")
 for param_name in model.get_params().keys():
     print(param_name)
@@ -141,7 +141,6 @@ for param_name in model.get_params().keys():
 # %% [markdown]
 # The parameters that we want to set are:
 # - `'histgradientboostingclassifier__learning_rate'`;
-# - `'histgradientboostingclassifier__min_samples_leaf'`;
 # - `'histgradientboostingclassifier__max_leaf_nodes'`.
 # Let see how to use the `GridSearchCV` estimator for doing such search.
 # Since the grid-search will be costly, we will only explore the combination
