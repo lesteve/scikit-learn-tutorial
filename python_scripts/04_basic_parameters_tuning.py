@@ -123,25 +123,28 @@ print(f"The accuracy score using a {model.__class__.__name__} is "
 # The first step is to find the name of the parameters to be set. We use the
 # method `get_params()` to get this information. For instance, for a single
 # model like the `HistGradientBoostingClassifier`, we can get the list such as:
-
-print(
-    "The hyper-parameters are for a histogram GBDT model are:")
-for param_name in HistGradientBoostingClassifier().get_params().keys():
-    print(param_name)
+#
+# print(
+#     "The hyper-parameters are for a histogram GBDT model are:")
+# for param_name in HistGradientBoostingClassifier().get_params().keys():
+#     print(param_name)
 
 # %% [markdown]
 # When the model of interest is a `Pipeline`, i.e. a serie of transformers and
 # a predictor, the name of the estimator will be added at the front of the
 # parameter name with a double underscore ("dunder") in-between (e.g.
 # `estimator__parameters`).
-print("The hyper-parameters are for the full-pipeline are:")
-for param_name in model.get_params().keys():
-    print(param_name)
+# print("The hyper-parameters are for the full-pipeline are:")
+# for param_name in model.get_params().keys():
+#     print(param_name)
 
 # %% [markdown]
 # The parameters that we want to set are:
-# - `'histgradientboostingclassifier__learning_rate'`;
-# - `'histgradientboostingclassifier__max_leaf_nodes'`.
+# - `'histgradientboostingclassifier__learning_rate'`: this parameter will
+#   control the ability of a new tree to correct the error of the previous
+#   sequence of trees;
+# - `'histgradientboostingclassifier__max_leaf_nodes'`: this parameter will
+#   control the depth of each tree.
 # Let see how to use the `GridSearchCV` estimator for doing such search.
 # Since the grid-search will be costly, we will only explore the combination
 # learning-rate and the maximum number of nodes.
@@ -151,8 +154,8 @@ import numpy as np
 from sklearn.model_selection import GridSearchCV
 
 param_grid = {
-    'histgradientboostingclassifier__learning_rate': (0.001, 0.1),
-    'histgradientboostingclassifier__max_leaf_nodes': (5, 63),
+    'histgradientboostingclassifier__learning_rate': (0.001, 0.01, 0.1),
+    'histgradientboostingclassifier__max_leaf_nodes': (5, 43, 63),
 }
 model_grid_search = GridSearchCV(model, param_grid=param_grid,
                                  n_jobs=4, cv=5)
@@ -166,26 +169,70 @@ print(
 # all hyper-parameters and their associated values. The grid-search will be in
 # charge of creating all possible combinations and test them.
 #
-# The number of combinations will be equal to the product of the number of
-# values to explore for each parameter (e.g. in our example 2x2 combinations).
-# Thus, adding a new parameters with associated values to explore become
-# rapidly computationally expensive.
+# The number of combinations will be equal to the cardesian product of the
+# number of values to explore for each parameter (e.g. in our example 3 x 3
+# combinations). Thus, adding new parameters with their associated values to be
+# explored become rapidly computationally expensive.
 #
-# Once the grid-search fitted, it can be used as any other predictor by calling
-# `predict` and `predict_proba`. Internally, it will use the model with the
-# best parameters found during `fit`.
-
+# Once the grid-search is fitted, it can be used as any other predictor by
+# calling `predict` and `predict_proba`. Internally, it will use the model with
+# the best parameters found during `fit`.
+#
 # Get predictions for the 5 first samples using the estimator with the best
 # parameters.
+
+# %%
 model_grid_search.predict(df_test.iloc[0:5])
 
 # %% [markdown]
 # You can know about these parameters by looking at the `best_params_`
 # attribute.
 
+# %%
 print(
     f"The best set of parameters is: {model_grid_search.best_params_}"
 )
+
+# %% [markdown]
+# In addition, we can inspect all results which are stored in the attribute
+# `cv_results_` of the grid-search. We will filter some specific columns to
+# from these results
+
+# %%
+# get the parameter names
+column_results = [f"param_{name}"for name in param_grid.keys()]
+column_results += ["mean_test_score", "std_test_score", "rank_test_score"]
+
+cv_results = pd.DataFrame(model_grid_search.cv_results_)
+cv_results = cv_results[column_results].sort_values(
+    "mean_test_score", ascending=False)
+cv_results = cv_results.rename(
+    columns={"param_histgradientboostingclassifier__learning_rate":
+             "learning-rate",
+             "param_histgradientboostingclassifier__max_leaf_nodes":
+             "max leaf nodes"})
+cv_results
+
+# %% [markdown]
+# With only 2 parameters, we might want to visualize the grid-search as a
+# heatmap. We need to transform our `cv_results` into a dataframe where the
+# rows will correspond to the learning-rate values and the columns will
+# correspond to the maximum number of leaf and the content of the dataframe
+# will be the mean test scores.
+
+# %%
+heatmap_cv_results = cv_results.pivot_table(
+    values="mean_test_score",
+    index=["learning-rate"], columns=["max leaf nodes"])
+
+import matplotlib.pyplot as plt
+from seaborn import heatmap
+
+ax = heatmap(heatmap_cv_results, annot=True, cmap="YlGnBu")
+# FIXME: temporary fix since matplotlib 3.1.1 broke seaborn heatmap. Remove
+# with matplotlib 3.2
+ax.invert_yaxis()
+_ = ax.set_ylim([0, heatmap_cv_results.shape[0]])
 
 # %% [markdown]
 # With the `GridSearchCV` estimator, the parameters need to be specified
