@@ -262,7 +262,7 @@ param_distributions = {
     'histgradientboostingclassifier__min_samples_leaf': reciprocal_int(3, 40),
 }
 model_grid_search = RandomizedSearchCV(
-    model, param_distributions=param_distributions, n_iter=10,
+    model, param_distributions=param_distributions, n_iter=3,
     n_jobs=4, cv=5)
 model_grid_search.fit(df_train, target_train)
 print(
@@ -271,6 +271,42 @@ print(
 print(
     f"The best set of parameters is: {model_grid_search.best_params_}"
 )
+
+# %%
+# get the parameter names
+column_results = [f"param_{name}"for name in param_distributions.keys()]
+column_results += ["mean_test_score", "std_test_score", "rank_test_score"]
+
+cv_results = pd.DataFrame(model_grid_search.cv_results_)
+cv_results = cv_results[column_results].sort_values(
+    "mean_test_score", ascending=False)
+cv_results = cv_results.rename(
+    columns={"param_histgradientboostingclassifier__max_iter":
+             "max iter",
+             "param_histgradientboostingclassifier__learning_rate":
+             "learning-rate",
+             "param_histgradientboostingclassifier__max_leaf_nodes":
+             "max leaf nodes",
+             "param_histgradientboostingclassifier__min_samples_leaf":
+             "min samples leaf"})
+cv_results
+
+# %%
+pd.plotting.parallel_coordinates(
+    cv_results.drop(columns=["rank_test_score", "std_test_score"]),
+    "mean_test_score"
+)
+# %%
+
+import plotly.express as px
+
+fig = px.parallel_coordinates(
+    cv_results.drop(columns=["rank_test_score", "std_test_score"]),
+    color="mean_test_score",
+    dimensions=['learning-rate', 'max iter',
+                 'max leaf nodes', 'min samples leaf'],
+    color_continuous_scale=px.colors.diverging.Tealrose,
+    color_continuous_midpoint=2)
 
 # %% [markdown]
 # ## Notes on search efficiency
@@ -282,6 +318,7 @@ print(
 # efficient way than what we previously did with the `GridSearchCV`.
 
 # %%
+import time
 from sklearn.linear_model import LogisticRegressionCV
 
 # define the different Cs to try out
