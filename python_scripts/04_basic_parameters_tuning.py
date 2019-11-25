@@ -34,7 +34,7 @@ import pandas as pd
 df = pd.read_csv(
     "https://www.openml.org/data/get_csv/1595261/adult-census.csv")
 # Or use the local copy:
-# df = pd.read_csv('../datasets/adult-census.csv')
+# df = pd.read_csv(os.path.join("..", "datasets", "adult-census.csv"))
 
 # %%
 target_name = "class"
@@ -116,27 +116,26 @@ print(f"The accuracy score using a {model.__class__.__name__} is "
 # In short, we will set these parameters with some defined values, train our
 # model on some data, and evaluate the model performance on some left out data.
 # Ideally, we will select the parameters leading to the optimal performance on
-# the testing set. Scikit-learn provides a `GridSearchCV` estimator which will
-# handle the cross-validation and hyper-parameter search for us.
+# the testing set.
 
 # %% [markdown]
 # The first step is to find the name of the parameters to be set. We use the
 # method `get_params()` to get this information. For instance, for a single
 # model like the `HistGradientBoostingClassifier`, we can get the list such as:
-#
-# print(
-#     "The hyper-parameters are for a histogram GBDT model are:")
-# for param_name in HistGradientBoostingClassifier().get_params().keys():
-#     print(param_name)
+
+print("The hyper-parameters are for a histogram GBDT model are:")
+for param_name in HistGradientBoostingClassifier().get_params().keys():
+    print(param_name)
 
 # %% [markdown]
 # When the model of interest is a `Pipeline`, i.e. a serie of transformers and
 # a predictor, the name of the estimator will be added at the front of the
 # parameter name with a double underscore ("dunder") in-between (e.g.
 # `estimator__parameters`).
-# print("The hyper-parameters are for the full-pipeline are:")
-# for param_name in model.get_params().keys():
-#     print(param_name)
+
+print("The hyper-parameters are for the full-pipeline are:")
+for param_name in model.get_params().keys():
+    print(param_name)
 
 # %% [markdown]
 # The parameters that we want to set are:
@@ -145,6 +144,20 @@ print(f"The accuracy score using a {model.__class__.__name__} is "
 #   sequence of trees;
 # - `'histgradientboostingclassifier__max_leaf_nodes'`: this parameter will
 #   control the depth of each tree.
+
+# %% [markdown]
+# ## Exercises:
+#
+# Using two nested `for` loops, make a search of the best combinations of
+# the `learning_rate` and `max_leaf_nodes` parameters. In this regard, you will
+# need to train and test the model by setting the parameters. The evaluation
+# of the model should be performed using `cross_val_score`.
+
+# %% [markdown]
+# Instead of manually writting the two `for` loops, scikit-learn provides a
+# class called `GridSearchCV` which implement the exhaustive search implemented
+# during the exercise.
+#
 # Let see how to use the `GridSearchCV` estimator for doing such search.
 # Since the grid-search will be costly, we will only explore the combination
 # learning-rate and the maximum number of nodes.
@@ -154,7 +167,7 @@ import numpy as np
 from sklearn.model_selection import GridSearchCV
 
 param_grid = {
-    'histgradientboostingclassifier__learning_rate': (0.001, 0.01, 0.1),
+    'histgradientboostingclassifier__learning_rate': (0.01, 0.1, 1),
     'histgradientboostingclassifier__max_leaf_nodes': (5, 43, 63),
 }
 model_grid_search = GridSearchCV(model, param_grid=param_grid,
@@ -189,9 +202,8 @@ model_grid_search.predict(df_test.iloc[0:5])
 # attribute.
 
 # %%
-print(
-    f"The best set of parameters is: {model_grid_search.best_params_}"
-)
+print(f"The best set of parameters is: "
+      f"{model_grid_search.best_params_}")
 
 # %% [markdown]
 # In addition, we can inspect all results which are stored in the attribute
@@ -228,7 +240,7 @@ heatmap_cv_results = cv_results.pivot_table(
 import matplotlib.pyplot as plt
 from seaborn import heatmap
 
-ax = heatmap(heatmap_cv_results, annot=True, cmap="YlGnBu")
+ax = heatmap(heatmap_cv_results, annot=True, cmap="YlGnBu", vmin=0.7, vmax=0.9)
 # FIXME: temporary fix since matplotlib 3.1.1 broke seaborn heatmap. Remove
 # with matplotlib 3.2
 ax.invert_yaxis()
@@ -242,9 +254,13 @@ _ = ax.set_ylim([0, heatmap_cv_results.shape[0]])
 # Instead, we can randomly generate the parameter candidates. The
 # `RandomSearchCV` allows for such stochastic search. It is used similarly to
 # the `GridSearchCV` but the sampling distributions need to be specified
-# instead of the parameter values.
+# instead of the parameter values. For instance, we will draw candidates using
+# a log-uniform distribution also called reciprocal distribution. In addition,
+# we will optimize 2 other parameters:
+# - `max_iter`: it corresponds to the number of trees in the ensemble;
+# - `min_samples_leaf`: it corresponds to the minimum number of samples
+#   required in a leaf.
 
-# %%
 from scipy.stats import reciprocal
 from sklearn.model_selection import RandomizedSearchCV
 
@@ -256,13 +272,13 @@ class reciprocal_int:
 
 
 param_distributions = {
-    'histgradientboostingclassifier__max_iter': reciprocal_int(10, 100),
-    'histgradientboostingclassifier__learning_rate': reciprocal(0.001, 0.1),
+    'histgradientboostingclassifier__l2_regularization': reciprocal(1e-6, 1),
+    'histgradientboostingclassifier__learning_rate': reciprocal(0.001, 1),
     'histgradientboostingclassifier__max_leaf_nodes': reciprocal_int(5, 63),
     'histgradientboostingclassifier__min_samples_leaf': reciprocal_int(3, 40),
 }
 model_grid_search = RandomizedSearchCV(
-    model, param_distributions=param_distributions, n_iter=3,
+    model, param_distributions=param_distributions, n_iter=10,
     n_jobs=4, cv=5)
 model_grid_search.fit(df_train, target_train)
 print(
@@ -271,6 +287,10 @@ print(
 print(
     f"The best set of parameters is: {model_grid_search.best_params_}"
 )
+
+# [markdown]
+# We can inspect the results using the attributes `cv_results` as we previously
+# did.
 
 # %%
 # get the parameter names
@@ -281,113 +301,106 @@ cv_results = pd.DataFrame(model_grid_search.cv_results_)
 cv_results = cv_results[column_results].sort_values(
     "mean_test_score", ascending=False)
 cv_results = cv_results.rename(
-    columns={"param_histgradientboostingclassifier__max_iter":
-             "max iter",
+    columns={"param_histgradientboostingclassifier__l2_regularization":
+             "l2 regularization",
              "param_histgradientboostingclassifier__learning_rate":
              "learning-rate",
              "param_histgradientboostingclassifier__max_leaf_nodes":
              "max leaf nodes",
              "param_histgradientboostingclassifier__min_samples_leaf":
-             "min samples leaf"})
-cv_results
+             "min samples leaf",
+             "mean_test_score": "mean test accuracy",
+             "rank_test_score": "ranking"})
+cv_results.head()
 
-# %%
-pd.plotting.parallel_coordinates(
-    cv_results.drop(columns=["rank_test_score", "std_test_score"]),
-    "mean_test_score"
-)
+# [markdown]
+# In practice, a randomized grid-search is usually run with a large number of
+# iterations. In order to avoid the computation cost and still make a decent
+# analysis, we load the results obtained from a similar search with 200
+# iterations.
+
+#%%
+
+import os
+
+cv_results = pd.read_csv(
+    os.path.join("..", "figures", "randomized_search_results"), index_col=0)
+
+# [markdown]
+# As we have more than 2 paramters in our grid-search, we cannot visualize the
+# results using a heatmap. However, we can us a parallel coordinates plot.
+
 # %%
 
 import plotly.express as px
 
 fig = px.parallel_coordinates(
-    cv_results.drop(columns=["rank_test_score", "std_test_score"]),
-    color="mean_test_score",
-    dimensions=['learning-rate', 'max iter',
-                 'max leaf nodes', 'min samples leaf'],
+    cv_results.drop(columns=["ranking","std_test_score"]),
+    color="mean test accuracy",
+    dimensions=["learning-rate", "l2 regularization",
+                 "max leaf nodes", "min samples leaf",
+                 "mean test accuracy"],
     color_continuous_scale=px.colors.diverging.Tealrose,
-    color_continuous_midpoint=2)
+)
+fig.show()
 
-# %% [markdown]
-# ## Notes on search efficiency
+# [markdown]
+# The parallel coordinates plot will display the values of the hyper-parameters
+# on different columns while the performance metric is color coded. Thus, we
+# are able to quickly inspect if there is a range of hyper-parameters which is
+# working or not.
 #
-# Be aware that sometimes, scikit-learn provides `EstimatorCV` classes
-# which will internally perform the cross-validation in such way that it will
-# be more computationally efficient. We can give the example of the
-# `LogisticRegressionCV` which can be used to find the best `C` in a more
-# efficient way than what we previously did with the `GridSearchCV`.
-
-# %%
-import time
-from sklearn.linear_model import LogisticRegressionCV
-
-# define the different Cs to try out
-param_grid = {"C": (0.1, 1.0, 10.0)}
-
-model = make_pipeline(
-    preprocessor,
-    LogisticRegressionCV(Cs=param_grid['C'], max_iter=1000,
-                         solver='lbfgs', n_jobs=4, cv=5))
-start = time.time()
-model.fit(df_train, target_train)
-elapsed_time = time.time() - start
-print(f"Time elapsed to train LogisticRegressionCV: "
-      f"{elapsed_time:.3f} seconds")
-
-# %% [markdown]
-# The `fit` time for the `CV` version of `LogisticRegression` gives a speed-up
-# x2. This speed-up is provided by re-using the values of coefficients to
-# warm-start the estimator for the different `C` values.
+# You can select a subset of searches by selecting for instance a range of
+# value in the mean test accuracy metric.
+#
+# For instance, we observe that a small learning-rate (< 0.1)
+# is not a good choice since a lot of the blue line (i.e. low accuracy) are
+# emerging from this range of low values.
 
 # %% [markdown]
 # ## Exercises:
 #
 # - Build a machine learning pipeline:
-#       * preprocess the categorical columns using an `OrdinalEncoder` and let
-#         the numerical columns as they are.
-#       * use an `HistGradientBoostingClassifier` as a predictive model.
+#       * preprocess the categorical columns using a `OneHotEncoder` and use
+#         a `StandardScaler` to normalize the numerical data.
+#       * use a `LogisticRegression` as a predictive model.
 # - Make an hyper-parameters search using `RandomizedSearchCV` and tuning the
 #   parameters:
-#       * `learning_rate` with values ranging from 0.001 to 0.5. You can use
-#         an exponential distribution to sample the possible values.
-#       * `l2_regularization` with values ranging from 0 to 0.5. You can use
-#         a uniform distribution.
-#       * `max_leaf_nodes` with values ranging from 5 to 30. The values should
-#         be integer following a uniform distribution.
-#       * `min_samples_leaf` with values ranging from 5 to 30. The values
-#         should be integer following a uniform distribution.
+#       * `C` with values ranging from 0.001 to 10. You can use a reciprocal
+#         distribution (i.e. `scipy.stats.reciprocal`);
+#       * `solver` with possible values being `"liblinear"` and `"lbfgs"`;
+#       * `penalty` with possible values being `"l2"` and `"l1"`.
 #
-# In case you have issues of with unknown categories, try to precompute the
-# list of possible categories ahead of time and pass it explicitly to the
-# constructor of the encoder:
-#
-# ```python
-# categories = [data[column].unique()
-#               for column in data[categorical_columns]]
-# OrdinalEncoder(categories=categories)
-# ```
+# You might get some `FitFailedWarning` and try to explain why.
 
 # %% [markdown]
 # ## Combining evaluation and hyper-parameters search
 #
 # Cross-validation was used for searching for the best model parameters. We
-# previously evaluated model performance through cross-validation as well. If we
-# would like to combine both aspects, we need to perform a "nested"
-# cross-validation. The "outer" cross-validation is applied to assess the
-# model while the "inner" cross-validation sets the hyper-parameters of the
-# model on the data set provided by the "outer" cross-validation. In practice,
-# it is equivalent to including, `GridSearchCV`, `RandomSearchCV`, or any
+# previously evaluated model performance through cross-validation as well. If
+# we would like to combine both aspects, we need to perform a "nested"
+# cross-validation. The "outer" cross-validation is applied to assess the model
+# while the "inner" cross-validation sets the hyper-parameters of the model on
+# the data set provided by the "outer" cross-validation. In practice, it is
+# equivalent to including, `GridSearchCV`, `RandomSearchCV`, or any
 # `EstimatorCV` in a `cross_val_score` or `cross_validate` function call.
 
 # %%
 from sklearn.model_selection import cross_val_score
 
-model = make_pipeline(
-    preprocessor,
-    LogisticRegressionCV(max_iter=1000, solver='lbfgs', cv=5))
-score = cross_val_score(model, data, target, n_jobs=4, cv=5)
+# recall the definition of our grid-search
+param_distributions = {
+    'histgradientboostingclassifier__max_iter': reciprocal_int(10, 50),
+    'histgradientboostingclassifier__learning_rate': reciprocal(0.01, 1),
+    'histgradientboostingclassifier__max_leaf_nodes': reciprocal_int(15, 35),
+    'histgradientboostingclassifier__min_samples_leaf': reciprocal_int(3, 15),
+}
+model_grid_search = RandomizedSearchCV(
+    model, param_distributions=param_distributions, n_iter=10,
+    n_jobs=4, cv=5)
+score = cross_val_score(model_grid_search, data, target, n_jobs=4, cv=5)
 print(
-    f"The accuracy score is: {score.mean():.2f} +- {score.std():.2f}"
+    f"The accuracy score is: {score.mean():.3f} +- {score.std():.3f}"
 )
 print(f"The different scores obtained are: \n{score}")
 
