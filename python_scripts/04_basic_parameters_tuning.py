@@ -123,6 +123,8 @@ print(f"The accuracy score using a {model.__class__.__name__} is "
 # method `get_params()` to get this information. For instance, for a single
 # model like the `HistGradientBoostingClassifier`, we can get the list such as:
 
+# %%
+
 print("The hyper-parameters are for a histogram GBDT model are:")
 for param_name in HistGradientBoostingClassifier().get_params().keys():
     print(param_name)
@@ -132,6 +134,8 @@ for param_name in HistGradientBoostingClassifier().get_params().keys():
 # a predictor, the name of the estimator will be added at the front of the
 # parameter name with a double underscore ("dunder") in-between (e.g.
 # `estimator__parameters`).
+
+# %%
 
 print("The hyper-parameters are for the full-pipeline are:")
 for param_name in model.get_params().keys():
