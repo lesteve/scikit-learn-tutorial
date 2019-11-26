@@ -18,9 +18,9 @@
 #
 # The process of learning a predictive model is driven by a set of internal
 # parameters and a set of training data. These internal parameters are called
-# hyper-parameters and are specific for each family of models. In addition,
-# a specific set of parameters are optimal for a specific dataset and thus they need
-# to be optimized.
+# hyper-parameters and are specific for each family of models. In addition, a
+# specific set of parameters are optimal for a specific dataset and thus they
+# need to be optimized.
 #
 # This notebook shows:
 # * the influence of changing model parameters;
@@ -152,10 +152,14 @@ for param_name in model.get_params().keys():
 # %% [markdown]
 # ## Exercises:
 #
-# Using two nested `for` loops, make a search of the best combinations of
-# the `learning_rate` and `max_leaf_nodes` parameters. In this regard, you will
-# need to train and test the model by setting the parameters. The evaluation
-# of the model should be performed using `cross_val_score`.
+# Use the previously defined model (called `model`) and using two nested `for`
+# loops, make a search of the best combinations of the `learning_rate` and
+# `max_leaf_nodes` parameters. In this regard, you will need to train and test
+# the model by setting the parameters. The evaluation of the model should be
+# performed using `cross_val_score`. We can propose to define the following
+# parameters search:
+# - `learning_rate` for the values 0.01, 0.1, and 1;
+# - `max_leaf_nodes` for the values 5, 25, 45.
 
 # %% [markdown]
 # Instead of manually writting the two `for` loops, scikit-learn provides a
@@ -268,9 +272,11 @@ _ = ax.set_ylim([0, heatmap_cv_results.shape[0]])
 from scipy.stats import reciprocal
 from sklearn.model_selection import RandomizedSearchCV
 
+
 class reciprocal_int:
     def __init__(self, a, b):
         self._distribution = reciprocal(a, b)
+
     def rvs(self, *args, **kwargs):
         return self._distribution.rvs(*args, **kwargs).astype(int)
 
@@ -281,15 +287,15 @@ param_distributions = {
     'histgradientboostingclassifier__max_leaf_nodes': reciprocal_int(5, 63),
     'histgradientboostingclassifier__min_samples_leaf': reciprocal_int(3, 40),
 }
-model_grid_search = RandomizedSearchCV(
+model_random_search = RandomizedSearchCV(
     model, param_distributions=param_distributions, n_iter=10,
     n_jobs=4, cv=5)
 model_grid_search.fit(df_train, target_train)
 print(
-    f"The accuracy score using a {model_grid_search.__class__.__name__} is "
-    f"{model_grid_search.score(df_test, target_test):.2f}")
+    f"The accuracy score using a {model_random_search.__class__.__name__} is "
+    f"{model_random_search.score(df_test, target_test):.2f}")
 print(
-    f"The best set of parameters is: {model_grid_search.best_params_}"
+    f"The best set of parameters is: {model_random_search.best_params_}"
 )
 
 # [markdown]
@@ -301,7 +307,7 @@ print(
 column_results = [f"param_{name}"for name in param_distributions.keys()]
 column_results += ["mean_test_score", "std_test_score", "rank_test_score"]
 
-cv_results = pd.DataFrame(model_grid_search.cv_results_)
+cv_results = pd.DataFrame(model_random_search.cv_results_)
 cv_results = cv_results[column_results].sort_values(
     "mean_test_score", ascending=False)
 cv_results = cv_results.rename(
@@ -323,7 +329,7 @@ cv_results.head()
 # analysis, we load the results obtained from a similar search with 200
 # iterations.
 
-#%%
+# %%
 
 import os
 
@@ -339,11 +345,11 @@ cv_results = pd.read_csv(
 import plotly.express as px
 
 fig = px.parallel_coordinates(
-    cv_results.drop(columns=["ranking","std_test_score"]),
+    cv_results.drop(columns=["ranking", "std_test_score"]),
     color="mean test accuracy",
     dimensions=["learning-rate", "l2 regularization",
-                 "max leaf nodes", "min samples leaf",
-                 "mean test accuracy"],
+                "max leaf nodes", "min samples leaf",
+                "mean test accuracy"],
     color_continuous_scale=px.colors.diverging.Tealrose,
 )
 fig.show()
@@ -373,7 +379,8 @@ fig.show()
 #       * `C` with values ranging from 0.001 to 10. You can use a reciprocal
 #         distribution (i.e. `scipy.stats.reciprocal`);
 #       * `solver` with possible values being `"liblinear"` and `"lbfgs"`;
-#       * `penalty` with possible values being `"l2"` and `"l1"`.
+#       * `penalty` with possible values being `"l2"` and `"l1"`;
+#       * `drop` with possible values being `None` or `"first"`.
 #
 # You might get some `FitFailedWarning` and try to explain why.
 
@@ -399,10 +406,10 @@ param_distributions = {
     'histgradientboostingclassifier__max_leaf_nodes': reciprocal_int(15, 35),
     'histgradientboostingclassifier__min_samples_leaf': reciprocal_int(3, 15),
 }
-model_grid_search = RandomizedSearchCV(
+model_random_search = RandomizedSearchCV(
     model, param_distributions=param_distributions, n_iter=10,
     n_jobs=4, cv=5)
-score = cross_val_score(model_grid_search, data, target, n_jobs=4, cv=5)
+score = cross_val_score(model_random_search, data, target, n_jobs=4, cv=5)
 print(
     f"The accuracy score is: {score.mean():.3f} +- {score.std():.3f}"
 )
