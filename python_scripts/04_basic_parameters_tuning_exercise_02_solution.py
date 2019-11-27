@@ -14,7 +14,7 @@
 # ---
 
 # %% [markdown]
-# #  Exercise 01
+# # Exercise 02
 # The goal is to find the best set of hyper-parameters which maximize the
 # performance on a training set.
 
@@ -85,6 +85,7 @@ from sklearn.linear_model import LogisticRegression
 
 model = make_pipeline(preprocessor, LogisticRegression())
 
+# %% [markdown]
 # Use a `RandomizedSearchCV` to find the best set of hyper-parameters by tuning
 # the following parameters for the `LogisticRegression` model:
 # - `C` with values ranging from 0.001 to 10. You can use a reciprocal
@@ -94,6 +95,9 @@ model = make_pipeline(preprocessor, LogisticRegression())
 # In addition, try several preprocessing strategies with the `OneHotEncoder`
 # by always (or not) dropping the first column when encoding the categorical
 # data.
+#
+# Notes: You can accept failure during a grid-search or a randomized-search
+# by settgin `error_score` to `np.nan` for instance.
 
 # %%
 from sklearn.model_selection import RandomizedSearchCV

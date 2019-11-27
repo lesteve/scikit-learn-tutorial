@@ -298,7 +298,7 @@ print(
     f"The best set of parameters is: {model_random_search.best_params_}"
 )
 
-# [markdown]
+# %% [markdown]
 # We can inspect the results using the attributes `cv_results` as we previously
 # did.
 
@@ -323,7 +323,7 @@ cv_results = cv_results.rename(
              "rank_test_score": "ranking"})
 cv_results.head()
 
-# [markdown]
+# %% [markdown]
 # In practice, a randomized grid-search is usually run with a large number of
 # iterations. In order to avoid the computation cost and still make a decent
 # analysis, we load the results obtained from a similar search with 200
@@ -336,7 +336,7 @@ import os
 cv_results = pd.read_csv(
     os.path.join("..", "figures", "randomized_search_results"), index_col=0)
 
-# [markdown]
+# %% [markdown]
 # As we have more than 2 paramters in our grid-search, we cannot visualize the
 # results using a heatmap. However, we can us a parallel coordinates plot.
 
@@ -354,7 +354,7 @@ fig = px.parallel_coordinates(
 )
 fig.show()
 
-# [markdown]
+# %% [markdown]
 # The parallel coordinates plot will display the values of the hyper-parameters
 # on different columns while the performance metric is color coded. Thus, we
 # are able to quickly inspect if there is a range of hyper-parameters which is
@@ -420,3 +420,22 @@ print(f"The different scores obtained are: \n{score}")
 # of the model. When analyzing such model, you should not only look at the
 # overall model performance but look at the hyper-parameters variations as
 # well.
+
+# %% [markdown]
+#
+# In this notebook, we have:
+# * manually tuned the hyper-parameters of a machine-learning pipeline;
+# * automatically tuned the hyper-parameters of a machine-learning pipeline by
+#   by exhaustively searching the best combination of parameters from a defined
+#   grid;
+# * automatically tuned the hyper-parameters of a machine-learning pipeline by
+#   drawing values candidates from some predefined distributions;
+# * integrate an hyper-parameters tuning within a cross-validation.
+#
+# Key ideas discussed:
+# * a grid-search is a costly search and does scale with the number of
+#   parameters to search;
+# * a randomized-search will run with a fixed given budget;
+# * when assessing the performance of a model, hyper-parameters search should
+#   be computed on the training data or can be integrated within another
+#   cross-validation scheme.
