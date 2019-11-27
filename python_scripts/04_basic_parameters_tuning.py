@@ -124,7 +124,6 @@ print(f"The accuracy score using a {model.__class__.__name__} is "
 # model like the `HistGradientBoostingClassifier`, we can get the list such as:
 
 # %%
-
 print("The hyper-parameters are for a histogram GBDT model are:")
 for param_name in HistGradientBoostingClassifier().get_params().keys():
     print(param_name)
@@ -136,7 +135,6 @@ for param_name in HistGradientBoostingClassifier().get_params().keys():
 # `estimator__parameters`).
 
 # %%
-
 print("The hyper-parameters are for the full-pipeline are:")
 for param_name in model.get_params().keys():
     print(param_name)
@@ -269,6 +267,7 @@ _ = ax.set_ylim([0, heatmap_cv_results.shape[0]])
 # - `min_samples_leaf`: it corresponds to the minimum number of samples
 #   required in a leaf.
 
+# %%
 from scipy.stats import reciprocal
 from sklearn.model_selection import RandomizedSearchCV
 
@@ -290,7 +289,7 @@ param_distributions = {
 model_random_search = RandomizedSearchCV(
     model, param_distributions=param_distributions, n_iter=10,
     n_jobs=4, cv=5)
-model_grid_search.fit(df_train, target_train)
+model_random_search.fit(df_train, target_train)
 print(
     f"The accuracy score using a {model_random_search.__class__.__name__} is "
     f"{model_random_search.score(df_test, target_test):.2f}")
@@ -330,18 +329,18 @@ cv_results.head()
 # iterations.
 
 # %%
-
 import os
 
 cv_results = pd.read_csv(
-    os.path.join("..", "figures", "randomized_search_results"), index_col=0)
+    os.path.join(
+        "..", "figures", "randomized_search_results.csv"),
+    index_col=0)
 
 # %% [markdown]
 # As we have more than 2 paramters in our grid-search, we cannot visualize the
 # results using a heatmap. However, we can us a parallel coordinates plot.
 
 # %%
-
 import plotly.express as px
 
 fig = px.parallel_coordinates(
