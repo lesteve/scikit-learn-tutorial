@@ -79,23 +79,24 @@ model = make_pipeline(
 # parameters search:
 # - `learning_rate` for the values 0.01, 0.1, and 1;
 # - `max_leaf_nodes` for the values 5, 25, 45.
-#
-# from sklearn.model_selection import cross_val_score
-#
-# learning_rate = [0.01, 0.1, 1, 10]
-# max_leaf_nodes = [5, 25, 45]
-#
-# best_score = 0
-# best_params = {}
-# for lr in learning_rate:
-#     for mln in max_leaf_nodes:
-#         model.set_params(
-#             histgradientboostingclassifier__learning_rate=lr,
-#             histgradientboostingclassifier__max_leaf_nodes=mln
-#         )
-#         scores = cross_val_score(model, df_train, target_train, cv=3)
-#         if scores.mean() > best_score:
-#             best_score = scores.mean()
-#             best_params = {'learning-rate': lr, 'max leaf nodes': mln}
-# print(f"The best accuracy obtained is {best_score:.3f}")
-# print(f"The best parameters found are:\n {best_params}")
+
+# %%
+from sklearn.model_selection import cross_val_score
+
+learning_rate = [0.01, 0.1, 1, 10]
+max_leaf_nodes = [5, 25, 45]
+
+best_score = 0
+best_params = {}
+for lr in learning_rate:
+    for mln in max_leaf_nodes:
+        model.set_params(
+            histgradientboostingclassifier__learning_rate=lr,
+            histgradientboostingclassifier__max_leaf_nodes=mln
+        )
+        scores = cross_val_score(model, df_train, target_train, cv=3)
+        if scores.mean() > best_score:
+            best_score = scores.mean()
+            best_params = {'learning-rate': lr, 'max leaf nodes': mln}
+print(f"The best accuracy obtained is {best_score:.3f}")
+print(f"The best parameters found are:\n {best_params}")
