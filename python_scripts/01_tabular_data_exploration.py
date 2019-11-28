@@ -142,10 +142,24 @@ import pandas_profiling
 adult_census.profile_report()
 
 # %% [markdown]
+# ## Exercise1
+# There is an interesting correlation between `sex` and `marital-status`.
+# * can you find where is appears in the `pandas-profiling` report?
+# * can you guess the reason of this correlation?
+
+# %% [markdown]
+# ## Exercise2
+# `pandas-profiling` shows a high number of duplicate rows
+# * find the number of exact duplicate rows in the `pandas-profiling` report
+# * can you find the same number using `pandas`? Hint: use `adult_census.duplicated`.
+# * do you think these duplicate rows are a problem?
+
+# %% [markdown]
 # As noted above, `education-num` distribution has two clear peaks around 10
 # and 13. It would be reasonable to expect that `education-num` is the number of
 # years of education. Let's look at the relationship between `education` and
 # `education-num`.
+
 # %%
 pd.crosstab(index=adult_census['education'],
             columns=adult_census['education-num'])
