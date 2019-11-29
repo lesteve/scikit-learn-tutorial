@@ -211,11 +211,6 @@ _ = sns.pairplot(data=adult_census[:n_samples_to_plot], x_vars='age',
 # less. This is a non-linear relationship between age and hours
 # per week. Some machine learning models can only capture linear interactions so
 # this may be a factor when deciding which model to chose.
-#
-# In a machine-learning setting, we will use an algorithm to automatically
-# decide what should be the "rules" in order to make predictions on new data.
-# We can check which set of simple rules a decision tree would grasp using the
-# same data.
 
 # %% [markdown]
 # In a machine-learning setting, we will use a model to automatically
