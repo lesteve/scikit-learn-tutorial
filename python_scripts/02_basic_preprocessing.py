@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.2'
-#       jupytext_version: 1.2.4
+#       jupytext_version: 1.2.3
 #   kernelspec:
 #     display_name: Python 3
 #     language: python
@@ -23,11 +23,9 @@
 # datasets.
 #
 # In particular we will highlight:
-# * the difference between numerical and categorical variables;
 # * the importance of scaling numerical variables;
-# * typical ways to deal categorical variables;
-# * how to train predictive models on different types of data;
-# * evaluate the performance of a model via cross-validation.
+# * how to train predictive models when you only have numerical variables;
+# * how to evaluate the performance of a model via cross-validation.
 #
 # ## Introducing the dataset
 #
@@ -280,13 +278,6 @@ print(
 # the model, the data and the target. Since there exists several
 # cross-validation strategies, `cross_val_score` takes a parameter `cv` which
 # defines the splitting strategy.
-#
-#
-#
-#
-#
-#
-#
 
 
 # %%
@@ -361,4 +352,14 @@ fig, ax = plt.subplots(figsize=(10, 6))
 cv = KFold(5)
 _ = plot_cv_indices(cv, X, y, ax)
 
-# TODO: add summary here
+# %% [markdown]
+# ## Summary
+# In this notebook we have seen:
+# * how to train predictive models when you only have numerical variables;
+#   the importance of scaling numerical variables through
+#   `sklearn.preprocessing.StandardScaler`;
+# * how to chain multiple steps (e.g. preprocessing with `StandardScaler` and
+#   a `LogisticRegression` model) in a single `scikit-learn` estimator through
+#   `sklearn.compose.Pipeline`
+# * how to evaluate the performance of a model via cross-validation through
+# * `sklearn.model_selection.cross_val_score`.

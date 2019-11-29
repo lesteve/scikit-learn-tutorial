@@ -7,16 +7,20 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.2'
-#       jupytext_version: 1.2.4
+#       jupytext_version: 1.2.3
 #   kernelspec:
 #     display_name: Python 3
 #     language: python
 #     name: python3
 # ---
 
-# %%
-# TODO add intro with objectives
-
+# %% [markdown]
+# In this notebook, we will present how to handle categorical variables. In
+# particular we will highlight:
+# * the difference between numerical and categorical variables;
+# * typical ways to deal categorical variables;
+# * how to apply different preprocessing for numerical and categorical variables
+#
 # ## [markdown]
 # Let's first load the data as we did in the previous notebook. TODO add link.
 
@@ -325,13 +329,6 @@ print(model.score(data_test, target_test))
 #
 # This explains why Gradient Boosted Machines are very popular among datascience
 # practitioners who work with tabular data.
-#
-#
-#
-#
-#
-#
-#
 
 
 # %% [markdown]
@@ -343,3 +340,10 @@ print(model.score(data_test, target_test))
 #   accuracy of `HistGradientBoostingClassifier` but slows down the training.
 #
 # Use the dedicated notebook to do this exercise.
+
+# %% [markdown]
+# In this notebook we have seen:
+# * the difference between numerical and categorical variables;
+# * typical ways to deal categorical variables;
+# * how to apply different preprocessing for numerical and categorical
+# * variables through a `ColumnTransformer`
