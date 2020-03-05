@@ -66,18 +66,15 @@ categorical_columns = [
     'workclass', 'education', 'marital-status', 'occupation',
     'relationship', 'race', 'native-country', 'sex']
 
-categories = [data[column].unique()
-              for column in data[categorical_columns]]
+categories = [
+    data[column].unique() for column in data[categorical_columns]]
 
 categorical_preprocessor = OrdinalEncoder(categories=categories)
 
-preprocessor = ColumnTransformer(
-    [
-        ('cat-preprocessor', categorical_preprocessor, categorical_columns),
-    ],
-    remainder='passthrough',
-    sparse_threshold=0
-)
+preprocessor = ColumnTransformer([
+    ('cat-preprocessor', categorical_preprocessor,
+     categorical_columns),], remainder='passthrough',
+                                 sparse_threshold=0)
 
 # %% [markdown]
 # Finally, we use a tree-based classifier (i.e. histogram gradient-boosting) to
@@ -92,12 +89,15 @@ from sklearn.pipeline import Pipeline
 
 model = Pipeline([
     ("preprocessor", preprocessor),
-    ("classifier", HistGradientBoostingClassifier(max_leaf_nodes=16, learning_rate=0.05, random_state=42)),
-])
+    ("classifier",
+     HistGradientBoostingClassifier(max_leaf_nodes=16,
+                                    learning_rate=0.05,
+                                    random_state=42)),])
 model.fit(df_train, target_train)
 
-print(f"The test accuracy score of the gradient boosting pipeline is: "
-      f"{model.score(df_test, target_test):.2f}")
+print(
+    f"The test accuracy score of the gradient boosting pipeline is: "
+    f"{model.score(df_test, target_test):.2f}")
 
 # %% [markdown]
 # ## Quizz
@@ -146,7 +146,8 @@ print(f"The test accuracy score of the gradient boosting pipeline is: "
 
 # %%
 print("The hyper-parameters are for a histogram GBDT model are:")
-for param_name in HistGradientBoostingClassifier().get_params().keys():
+for param_name in HistGradientBoostingClassifier().get_params().keys(
+):
     print(param_name)
 
 # %% [markdown]
@@ -198,8 +199,7 @@ from sklearn.model_selection import GridSearchCV
 
 param_grid = {
     'classifier__learning_rate': (0.05, 0.1, 0.5, 1, 5),
-    'classifier__max_leaf_nodes': (3, 10, 30, 100),
-}
+    'classifier__max_leaf_nodes': (3, 10, 30, 100),}
 model_grid_search = GridSearchCV(model, param_grid=param_grid,
                                  n_jobs=4, cv=2)
 model_grid_search.fit(df_train, target_train)
@@ -250,8 +250,9 @@ cv_results.head()
 
 # %%
 # get the parameter names
-column_results = [f"param_{name}"for name in param_grid.keys()]
-column_results += ["mean_test_score", "std_test_score", "rank_test_score"]
+column_results = [f"param_{name}" for name in param_grid.keys()]
+column_results += [
+    "mean_test_score", "std_test_score", "rank_test_score"]
 cv_results = cv_results[column_results]
 
 
@@ -260,7 +261,7 @@ def shorten_param(param_name):
     if "__" in param_name:
         return param_name.rsplit("__", 1)[1]
     return param_name
-    
+
 
 cv_results = cv_results.rename(shorten_param, axis=1)
 cv_results
@@ -274,8 +275,8 @@ cv_results
 
 # %%
 pivoted_cv_results = cv_results.pivot_table(
-    values="mean_test_score",
-    index=["learning_rate"], columns=["max_leaf_nodes"])
+    values="mean_test_score", index=["learning_rate"],
+    columns=["max_leaf_nodes"])
 
 pivoted_cv_results
 
@@ -283,8 +284,8 @@ pivoted_cv_results
 import matplotlib.pyplot as plt
 from seaborn import heatmap
 
-ax = heatmap(pivoted_cv_results, annot=True, cmap="YlGnBu",
-             vmin=0.7, vmax=0.9)
+ax = heatmap(pivoted_cv_results, annot=True, cmap="YlGnBu", vmin=0.7,
+             vmax=0.9)
 ax.invert_yaxis()
 
 # %% [markdown]
@@ -337,8 +338,7 @@ param_distributions = {
     'classifier__learning_rate': reciprocal(0.001, 10),
     'classifier__max_leaf_nodes': reciprocal_int(2, 256),
     'classifier__min_samples_leaf': reciprocal_int(1, 100),
-    'classifier__max_bins': reciprocal_int(2, 255),
-}
+    'classifier__max_bins': reciprocal_int(2, 255),}
 model_random_search = RandomizedSearchCV(
     model, param_distributions=param_distributions, n_iter=10,
     n_jobs=4, cv=5)
@@ -357,8 +357,10 @@ pprint(model_random_search.best_params_)
 
 # %%
 # get the parameter names
-column_results = [f"param_{name}"for name in param_distributions.keys()]
-column_results += ["mean_test_score", "std_test_score", "rank_test_score"]
+column_results = [
+    f"param_{name}" for name in param_distributions.keys()]
+column_results += [
+    "mean_test_score", "std_test_score", "rank_test_score"]
 
 cv_results = pd.DataFrame(model_random_search.cv_results_)
 cv_results = cv_results[column_results].sort_values(
@@ -389,9 +391,8 @@ cv_results = pd.read_csv("../figures/randomized_search_results.csv",
 # results using a heatmap. However, we can us a parallel coordinates plot.
 
 # %%
-(cv_results[column_results]
-    .rename(shorten_param, axis=1)
-    .sort_values("mean_test_score"))
+(cv_results[column_results].rename(
+    shorten_param, axis=1).sort_values("mean_test_score"))
 
 # %%
 import plotly.express as px
@@ -403,8 +404,7 @@ fig = px.parallel_coordinates(
         "max_bins": np.log2,
         "min_samples_leaf": np.log10,
         "l2_regularization": np.log10,
-        "mean_test_score": lambda x: x,
-    }),
+        "mean_test_score": lambda x: x,}),
     color="mean_test_score",
     color_continuous_scale=px.colors.sequential.Viridis,
 )
@@ -492,13 +492,13 @@ param_distributions = {
     'classifier__max_iter': reciprocal_int(10, 50),
     'classifier__learning_rate': reciprocal(0.01, 10),
     'classifier__max_leaf_nodes': reciprocal_int(2, 16),
-    'classifier__min_samples_leaf': reciprocal_int(1, 50),
-}
+    'classifier__min_samples_leaf': reciprocal_int(1, 50),}
 model_random_search = RandomizedSearchCV(
     model, param_distributions=param_distributions, n_iter=10,
     n_jobs=4, cv=5)
 
-scores = cross_val_score(model_random_search, data, target, n_jobs=4, cv=5)
+scores = cross_val_score(model_random_search, data, target, n_jobs=4,
+                         cv=5)
 
 # %%
 print(f"The cross-validated accuracy score is:"
